@@ -1,0 +1,23 @@
+.empty {
+  display: grid;
+  justify-items: center;
+  gap: 10px;
+  padding: 68px 24px;
+  border: 1px dashed #ccdaec;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.72);
+  color: #7b8aa3;
+}
+
+.empty svg {
+  color: #91a6c4;
+}
+
+.empty strong {
+  color: #31405a;
+  font-size: 20px;
+}
+
+.empty span {
+  font-size: 15px;
+}

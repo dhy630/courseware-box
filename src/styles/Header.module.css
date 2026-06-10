@@ -1,0 +1,159 @@
+.header {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  display: grid;
+  grid-template-columns: 360px 1fr 360px;
+  align-items: center;
+  height: 84px;
+  padding: 0 36px;
+  border-bottom: 1px solid rgba(226, 234, 245, 0.9);
+  background: rgba(255, 255, 255, 0.94);
+  box-shadow: 0 2px 10px rgba(65, 100, 150, 0.035);
+  backdrop-filter: blur(12px);
+}
+
+.logoGroup {
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+  color: var(--text-primary);
+  font-size: 25px;
+  font-weight: 800;
+}
+
+.logoMark {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 42px;
+  height: 42px;
+  border-radius: 12px;
+  background: linear-gradient(145deg, #0e88ff 0%, #0b5de6 100%);
+  color: #ffffff;
+  font-size: 28px;
+  font-weight: 900;
+  transform: skewY(-8deg);
+  box-shadow: 0 10px 24px rgba(8, 119, 242, 0.24);
+}
+
+.nav {
+  display: inline-flex;
+  justify-content: center;
+  gap: 54px;
+  height: 100%;
+}
+
+.navButton {
+  position: relative;
+  min-width: 116px;
+  border: 0;
+  background: transparent;
+  color: #4f5f7c;
+  font-size: 22px;
+  font-weight: 750;
+}
+
+.navButton::after {
+  position: absolute;
+  right: 0;
+  bottom: -1px;
+  left: 0;
+  width: 112px;
+  height: 4px;
+  margin: auto;
+  border-radius: 999px 999px 0 0;
+  background: transparent;
+  content: "";
+}
+
+.activeNav {
+  color: var(--primary);
+}
+
+.activeNav::after {
+  background: var(--primary);
+}
+
+.userArea {
+  position: relative;
+  justify-self: end;
+}
+
+.userButton {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  min-width: 214px;
+  height: 66px;
+  border: 0;
+  background: transparent;
+  color: #25304a;
+}
+
+.avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background: linear-gradient(180deg, #e4f0ff 0%, #b8d8ff 100%);
+  color: #0d75ee;
+}
+
+.userText {
+  display: grid;
+  gap: 4px;
+  min-width: 98px;
+  text-align: left;
+}
+
+.userText strong {
+  font-size: 18px;
+}
+
+.userText span {
+  color: #63718b;
+  font-size: 14px;
+  font-weight: 650;
+}
+
+.userMenu {
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  width: 214px;
+  padding: 10px;
+  border: 1px solid #deebfa;
+  border-radius: 14px;
+  background: #ffffff;
+  box-shadow: 0 18px 44px rgba(44, 82, 128, 0.16);
+}
+
+.branchLine,
+.userMenu button {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  min-height: 42px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 10px;
+  background: transparent;
+  color: #344058;
+  text-align: left;
+  font-size: 14px;
+  font-weight: 650;
+}
+
+.branchLine {
+  color: #66758f;
+  cursor: default;
+}
+
+.userMenu button:hover {
+  background: #f2f7ff;
+  color: var(--primary);
+}

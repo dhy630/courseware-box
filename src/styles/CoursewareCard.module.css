@@ -1,0 +1,90 @@
+.card {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: 154px;
+  gap: 24px;
+  overflow: hidden;
+  padding: 24px 40px 24px 22px;
+  border: 1px solid #e0eaf7;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #ffffff 0%, #fbfdff 100%);
+  box-shadow: 0 10px 24px rgba(40, 83, 138, 0.06);
+}
+
+.content {
+  position: relative;
+  z-index: 1;
+  min-width: 0;
+}
+
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 34px;
+  padding: 0 12px;
+  border-radius: 8px;
+  background: #eaf4ff;
+  color: var(--primary);
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.card h3 {
+  margin: 18px 0 14px;
+  color: var(--text-primary);
+  font-size: 25px;
+  font-weight: 800;
+  line-height: 1.25;
+}
+
+.meta {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  color: #62718c;
+  font-size: 16px;
+  font-weight: 650;
+}
+
+.meta span {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.meta i {
+  width: 1px;
+  height: 16px;
+  background: #d3deec;
+}
+
+.cardWatermark {
+  position: absolute;
+  right: 78px;
+  bottom: -24px;
+  color: rgba(8, 119, 242, 0.06);
+  transform: rotate(-12deg);
+}
+
+.action {
+  position: relative;
+  z-index: 1;
+  flex: 0 0 auto;
+  min-width: 116px;
+  height: 48px;
+  padding: 0 20px;
+  border: 0;
+  border-radius: 10px;
+  background: linear-gradient(180deg, #1284ff 0%, #006ef0 100%);
+  color: #ffffff;
+  font-size: 17px;
+  font-weight: 800;
+  box-shadow: 0 10px 22px rgba(8, 119, 242, 0.22);
+}
+
+.action:hover {
+  background: linear-gradient(180deg, #0d79ef 0%, #005fd5 100%);
+}
