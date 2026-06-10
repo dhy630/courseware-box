@@ -1,4 +1,3 @@
-import { useEffect, useState } from "react";
 import type { Branch } from "../types";
 import styles from "../styles/BranchModal.module.css";
 
@@ -17,22 +16,12 @@ export function BranchModal({
   onCancel,
   onConfirm,
 }: BranchModalProps) {
-  const [selectedBranchId, setSelectedBranchId] = useState(currentBranch.id);
-
-  useEffect(() => {
-    if (open) {
-      setSelectedBranchId(currentBranch.id);
-    }
-  }, [currentBranch.id, open]);
-
   if (!open) {
     return null;
   }
 
-  const selectedBranch = branches.find((branch) => branch.id === selectedBranchId) ?? currentBranch;
-
-  const handleConfirm = () => {
-    onConfirm(selectedBranch);
+  const handleSelect = (branch: Branch) => {
+    onConfirm(branch);
     onCancel();
   };
 
@@ -46,25 +35,31 @@ export function BranchModal({
         onMouseDown={(event) => event.stopPropagation()}
       >
         <h2 id="branch-modal-title">切换分校</h2>
-        <label className={styles.field}>
-          <span>分校</span>
-          <select
-            value={selectedBranchId}
-            onChange={(event) => setSelectedBranchId(Number(event.target.value))}
-          >
-            {branches.map((branch) => (
-              <option key={branch.id} value={branch.id}>
-                {branch.name}
-              </option>
-            ))}
-          </select>
-        </label>
+        <div className={styles.branchGrid} role="list" aria-label="分校列表">
+          {branches.map((branch) => {
+            const isCurrent = branch.id === currentBranch.id;
+
+            return (
+              <button
+                key={branch.id}
+                className={`${styles.branchOption} ${isCurrent ? styles.currentBranch : ""}`}
+                type="button"
+                role="listitem"
+                aria-current={isCurrent ? "true" : undefined}
+                onClick={() => handleSelect(branch)}
+              >
+                <span className={styles.branchIcon}>{branch.name.slice(0, 1)}</span>
+                <span className={styles.branchName}>
+                  {branch.name}
+                  {isCurrent ? <em>当前</em> : null}
+                </span>
+              </button>
+            );
+          })}
+        </div>
         <footer className={styles.actions}>
           <button className={styles.cancelButton} type="button" onClick={onCancel}>
             取消
-          </button>
-          <button className={styles.confirmButton} type="button" onClick={handleConfirm}>
-            确认切换
           </button>
         </footer>
       </section>

@@ -58,7 +58,7 @@ export function CourseCard({ course, onStartCourse }: CourseCardProps) {
         {course.coursewareStatus === "NONE" ? (
           <div className={styles.mutedMessage}>
             <Info size={22} />
-            <span>当前分校与合肥均未上传该课程课件</span>
+            <span>该课程课件暂未上传，请联系教研</span>
           </div>
         ) : null}
       </div>

@@ -10,7 +10,7 @@
 }
 
 .modal {
-  width: 420px;
+  width: 480px;
   padding: 28px;
   border: 1px solid rgba(220, 232, 247, 0.9);
   border-radius: 20px;
@@ -19,37 +19,85 @@
 }
 
 .modal h2 {
-  margin: 0 0 24px;
+  margin: 0 0 22px;
   color: var(--text-primary);
   font-size: 24px;
 }
 
-.field {
+.branchGrid {
   display: grid;
-  gap: 10px;
-  color: #5f6f89;
-  font-size: 15px;
-  font-weight: 700;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
 }
 
-.field select {
-  height: 48px;
-  padding: 0 14px;
-  border: 1px solid #dce7f5;
-  border-radius: 12px;
-  color: var(--text-primary);
+.branchOption {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 72px;
+  padding: 14px;
+  border: 1px solid #dfe8f5;
+  border-radius: 14px;
   background: #ffffff;
+  color: var(--text-primary);
+  text-align: left;
+  transition:
+    border-color 160ms ease,
+    background 160ms ease,
+    color 160ms ease;
+}
+
+.branchOption:hover {
+  border-color: #b8d5ff;
+  background: #f6faff;
+}
+
+.currentBranch {
+  border-color: #91c2ff;
+  background: #eef6ff;
+  color: var(--primary);
+}
+
+.branchIcon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+  background: #eef4fb;
+  color: #5f7089;
+  font-size: 16px;
+  font-weight: 800;
+}
+
+.currentBranch .branchIcon {
+  background: var(--primary);
+  color: #ffffff;
+}
+
+.branchName {
+  display: grid;
+  gap: 3px;
+  font-size: 16px;
+  font-weight: 750;
+}
+
+.branchName em {
+  color: #5d8ed4;
+  font-size: 12px;
+  font-style: normal;
+  font-weight: 700;
 }
 
 .actions {
   display: flex;
   justify-content: flex-end;
   gap: 12px;
-  margin-top: 28px;
+  margin-top: 22px;
 }
 
-.cancelButton,
-.confirmButton {
+.cancelButton {
   min-width: 104px;
   height: 42px;
   border-radius: 10px;
@@ -60,10 +108,4 @@
   border: 1px solid #dce7f5;
   background: #ffffff;
   color: #2f3b52;
-}
-
-.confirmButton {
-  border: 0;
-  background: var(--primary);
-  color: #ffffff;
 }
