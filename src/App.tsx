@@ -34,16 +34,35 @@ import type {
 import styles from "./styles/App.module.css";
 
 const subjectGradeOptions = [
-  { label: "信息学算法", children: ["初一", "五年级"] },
-  { label: "信息学语言传播", children: ["五年级"] },
-  { label: "数学思维", children: ["五年级"] },
+  {
+    label: "信息学算法",
+    children: ["一年级", "二年级", "三年级", "四年级", "五年级", "六年级", "初一"],
+  },
+  {
+    label: "信息学语言传播",
+    children: ["一年级", "二年级", "三年级", "四年级", "五年级", "六年级", "初一"],
+  },
+  {
+    label: "国文素养",
+    children: ["一年级", "二年级", "三年级", "四年级", "五年级", "六年级", "初一"],
+  },
+  {
+    label: "信息学实验P",
+    children: ["一年级", "二年级", "三年级", "四年级", "五年级", "六年级", "初一"],
+  },
+  {
+    label: "信息学实验C",
+    children: ["一年级", "二年级", "三年级", "四年级", "五年级", "六年级", "初一"],
+  },
 ];
 
 const courseTypeCourseOptions = [
-  { label: "长期课", children: ["春季课"] },
-  { label: "暑假课", children: ["强化课"] },
-  { label: "秋季课", children: ["同步课"] },
+  { label: "长期课", children: ["春季课", "暑假课", "秋季课", "寒假课"] },
+  { label: "短期课", children: ["短期课", "春季短期课", "暑假短期课", "秋季短期课", "寒假短期课"] },
+  { label: "公益课", children: [] },
 ];
+
+const normalizeKeyword = (keyword: string) => keyword.trim().toLowerCase();
 
 function App() {
   const [activeMainTab, setActiveMainTab] = useState<MainTab>("today");
@@ -200,16 +219,29 @@ interface CoursePracticeTabProps {
 }
 
 function CoursePracticeTab({ filters, onFiltersChange }: CoursePracticeTabProps) {
+  const [appliedKeyword, setAppliedKeyword] = useState("");
+  const filteredCoursewareList = useMemo(() => {
+    const keyword = normalizeKeyword(appliedKeyword);
+
+    if (!keyword) {
+      return coursewareList;
+    }
+
+    return coursewareList.filter((item) => item.title.toLowerCase().includes(keyword));
+  }, [appliedKeyword]);
+
   const handleFilter = <Key extends keyof CourseFilters>(key: Key, value: CourseFilters[Key]) => {
     onFiltersChange({ ...filters, [key]: value });
   };
 
   const handleSearch = () => {
     console.log("课程查询条件", filters);
+    setAppliedKeyword(filters.keyword);
   };
 
   const handleReset = () => {
     onFiltersChange(defaultCourseFilters);
+    setAppliedKeyword("");
   };
 
   const handleEnterPractice = (item: CoursewareItem) => {
@@ -252,12 +284,24 @@ function CoursePracticeTab({ filters, onFiltersChange }: CoursePracticeTabProps)
         <label className={styles.searchField}>
           <span>课件名称搜索</span>
           <div className={styles.searchControl}>
-            <Search size={20} />
+            <button
+              className={styles.searchButton}
+              type="button"
+              aria-label="搜索课件名称"
+              onClick={handleSearch}
+            >
+              <Search size={20} />
+            </button>
             <input
               type="search"
               value={filters.keyword}
               placeholder="搜索课件名称"
               onChange={(event) => handleFilter("keyword", event.target.value)}
+              onKeyDown={(event) => {
+                if (event.key === "Enter") {
+                  handleSearch();
+                }
+              }}
             />
           </div>
         </label>
@@ -271,16 +315,16 @@ function CoursePracticeTab({ filters, onFiltersChange }: CoursePracticeTabProps)
 
       <div className={styles.listHeader}>
         <div className={styles.listTitleGroup}>
-          <h2>课件列表</h2>
+          <h2>课程课件列表</h2>
           <span>
-            共找到 <strong>24</strong> 个课程
+            共找到 <strong>{appliedKeyword ? filteredCoursewareList.length : 24}</strong> 个课程
           </span>
         </div>
       </div>
 
-      {coursewareList.length > 0 ? (
+      {filteredCoursewareList.length > 0 ? (
         <div className={styles.cardGrid}>
-          {coursewareList.map((item) => (
+          {filteredCoursewareList.map((item) => (
             <CoursewareCard key={item.id} item={item} onAction={handleEnterPractice} />
           ))}
         </div>
@@ -297,6 +341,17 @@ interface EntrancePracticeTabProps {
 }
 
 function EntrancePracticeTab({ filters, onFiltersChange }: EntrancePracticeTabProps) {
+  const [appliedKeyword, setAppliedKeyword] = useState("");
+  const filteredEntranceCoursewareList = useMemo(() => {
+    const keyword = normalizeKeyword(appliedKeyword);
+
+    if (!keyword) {
+      return entranceCoursewareList;
+    }
+
+    return entranceCoursewareList.filter((item) => item.title.toLowerCase().includes(keyword));
+  }, [appliedKeyword]);
+
   const handleFilter = <Key extends keyof EntranceFilters>(
     key: Key,
     value: EntranceFilters[Key],
@@ -306,10 +361,12 @@ function EntrancePracticeTab({ filters, onFiltersChange }: EntrancePracticeTabPr
 
   const handleSearch = () => {
     console.log("入学测查询条件", filters);
+    setAppliedKeyword(filters.keyword);
   };
 
   const handleReset = () => {
     onFiltersChange(defaultEntranceFilters);
+    setAppliedKeyword("");
   };
 
   const handleEnterCourseware = (item: EntranceCoursewareItem) => {
@@ -340,12 +397,24 @@ function EntrancePracticeTab({ filters, onFiltersChange }: EntrancePracticeTabPr
         <label className={styles.searchField}>
           <span>名称搜索</span>
           <div className={styles.searchControl}>
-            <Search size={20} />
+            <button
+              className={styles.searchButton}
+              type="button"
+              aria-label="搜索课件名称"
+              onClick={handleSearch}
+            >
+              <Search size={20} />
+            </button>
             <input
               type="search"
               value={filters.keyword}
               placeholder="搜索课件名称"
               onChange={(event) => handleFilter("keyword", event.target.value)}
+              onKeyDown={(event) => {
+                if (event.key === "Enter") {
+                  handleSearch();
+                }
+              }}
             />
           </div>
         </label>
@@ -361,14 +430,14 @@ function EntrancePracticeTab({ filters, onFiltersChange }: EntrancePracticeTabPr
         <div className={styles.listTitleGroup}>
           <h2>入学测课件列表</h2>
           <span>
-            共找到 <strong>6</strong> 个课件
+            共找到 <strong>{appliedKeyword ? filteredEntranceCoursewareList.length : 6}</strong> 个课件
           </span>
         </div>
       </div>
 
-      {entranceCoursewareList.length > 0 ? (
+      {filteredEntranceCoursewareList.length > 0 ? (
         <div className={styles.cardGrid}>
-          {entranceCoursewareList.map((item) => (
+          {filteredEntranceCoursewareList.map((item) => (
             <CoursewareCard
               key={item.id}
               item={item}

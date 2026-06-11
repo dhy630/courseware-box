@@ -127,6 +127,11 @@
     0 4px 12px rgba(25, 52, 92, 0.06);
 }
 
+.singlePanel {
+  grid-template-columns: 1fr;
+  width: max(100%, 180px);
+}
+
 .parentColumn,
 .childColumn {
   display: grid;
@@ -138,6 +143,11 @@
 .parentColumn {
   padding-right: 6px;
   border-right: 1px solid #e7eef8;
+}
+
+.singlePanel .parentColumn {
+  padding-right: 0;
+  border-right: 0;
 }
 
 .parentOption,
@@ -177,10 +187,15 @@
   white-space: nowrap;
 }
 
-.parentOption svg {
+.parentArrow {
   flex: 0 0 auto;
   color: #94a3b8;
   transform: rotate(-90deg);
+}
+
+.parentCheck {
+  flex: 0 0 auto;
+  color: #126de5;
 }
 
 .activeParentOption {
@@ -188,7 +203,7 @@
   color: #126de5;
 }
 
-.activeParentOption svg,
+.activeParentOption .parentArrow,
 .childOption svg {
   flex: 0 0 auto;
   color: #126de5;

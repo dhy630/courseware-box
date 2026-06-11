@@ -41,7 +41,7 @@ export function Header({ activeTab, currentBranch, onTabChange, onSwitchBranch }
         <div className={styles.logoMark} aria-hidden="true">
           F
         </div>
-        <span>方田课件平台</span>
+        <span>课件盒子</span>
       </div>
 
       <nav className={styles.nav} aria-label="主导航">

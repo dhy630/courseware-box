@@ -21,7 +21,7 @@ export function CascaderField({ label, value, options, onChange }: CascaderField
   const fieldRef = useRef<HTMLDivElement>(null);
   const listboxId = useId();
 
-  const [selectedParent, selectedChild] = value.split(" / ");
+  const [selectedParent, selectedChild = ""] = value.split(" / ");
   const activeParent = useMemo(
     () => options.find((option) => option.label === selectedParent)?.label ?? options[0]?.label,
     [options, selectedParent],
@@ -30,6 +30,7 @@ export function CascaderField({ label, value, options, onChange }: CascaderField
 
   const previewChildren =
     options.find((option) => option.label === previewParent)?.children ?? options[0]?.children ?? [];
+  const hasPreviewChildren = previewChildren.length > 0;
 
   useEffect(() => {
     if (open) {
@@ -57,6 +58,16 @@ export function CascaderField({ label, value, options, onChange }: CascaderField
     setOpen(false);
   };
 
+  const handleParentSelect = (option: CascaderOption) => {
+    if (option.children.length === 0) {
+      onChange(option.label);
+      setOpen(false);
+      return;
+    }
+
+    setPreviewParent(option.label);
+  };
+
   return (
     <div className={styles.field} ref={fieldRef}>
       <span className={styles.label}>{label}</span>
@@ -76,8 +87,12 @@ export function CascaderField({ label, value, options, onChange }: CascaderField
         >
           <span className={styles.value}>
             <span>{selectedParent}</span>
-            <span className={styles.divider} aria-hidden="true" />
-            <span>{selectedChild}</span>
+            {selectedChild ? (
+              <>
+                <span className={styles.divider} aria-hidden="true" />
+                <span>{selectedChild}</span>
+              </>
+            ) : null}
           </span>
           <span className={styles.chevron} aria-hidden="true">
             <ChevronDown size={16} />
@@ -85,43 +100,57 @@ export function CascaderField({ label, value, options, onChange }: CascaderField
         </button>
 
         {open ? (
-          <div className={styles.panel} id={listboxId} role="listbox" aria-label={label}>
+          <div
+            className={`${styles.panel} ${hasPreviewChildren ? "" : styles.singlePanel}`}
+            id={listboxId}
+            role="listbox"
+            aria-label={label}
+          >
             <div className={styles.parentColumn}>
               {options.map((option) => {
                 const active = option.label === previewParent;
+                const selected = option.label === selectedParent && option.children.length === 0;
 
                 return (
                   <button
                     className={`${styles.parentOption} ${active ? styles.activeParentOption : ""}`}
                     key={option.label}
                     type="button"
-                    onClick={() => setPreviewParent(option.label)}
+                    role={option.children.length === 0 ? "option" : undefined}
+                    aria-selected={option.children.length === 0 ? selected : undefined}
+                    onClick={() => handleParentSelect(option)}
                   >
                     <span>{option.label}</span>
-                    <ChevronDown size={14} />
+                    {option.children.length === 0 ? (
+                      selected ? <Check className={styles.parentCheck} size={16} /> : null
+                    ) : (
+                      <ChevronDown className={styles.parentArrow} size={14} />
+                    )}
                   </button>
                 );
               })}
             </div>
-            <div className={styles.childColumn}>
-              {previewChildren.map((child) => {
-                const selected = previewParent === selectedParent && child === selectedChild;
+            {hasPreviewChildren ? (
+              <div className={styles.childColumn}>
+                {previewChildren.map((child) => {
+                  const selected = previewParent === selectedParent && child === selectedChild;
 
-                return (
-                  <button
-                    className={`${styles.childOption} ${selected ? styles.selectedChildOption : ""}`}
-                    key={child}
-                    type="button"
-                    role="option"
-                    aria-selected={selected}
-                    onClick={() => handleChildSelect(child)}
-                  >
-                    <span>{child}</span>
-                    {selected ? <Check size={16} /> : null}
-                  </button>
-                );
-              })}
-            </div>
+                  return (
+                    <button
+                      className={`${styles.childOption} ${selected ? styles.selectedChildOption : ""}`}
+                      key={child}
+                      type="button"
+                      role="option"
+                      aria-selected={selected}
+                      onClick={() => handleChildSelect(child)}
+                    >
+                      <span>{child}</span>
+                      {selected ? <Check size={16} /> : null}
+                    </button>
+                  );
+                })}
+              </div>
+            ) : null}
           </div>
         ) : null}
       </div>
