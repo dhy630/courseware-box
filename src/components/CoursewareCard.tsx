@@ -28,7 +28,7 @@ export function CoursewareCard(props: CoursewareCardProps) {
               入学测
             </>
           ) : (
-            <>第 {(item as CoursewareItem).lessonNo}讲</>
+            <>第 {(item as CoursewareItem).lessonNo} 讲</>
           )}
         </span>
         <h3>{item.title}</h3>

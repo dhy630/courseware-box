@@ -2,11 +2,11 @@ import { useMemo, useState } from "react";
 import {
   BookOpen,
   CalendarDays,
-  ChevronDown,
   ClipboardList,
   Search,
 } from "lucide-react";
 import { BranchModal } from "./components/BranchModal";
+import { CascaderField } from "./components/CascaderField";
 import { CourseCard } from "./components/CourseCard";
 import { CoursewareCard } from "./components/CoursewareCard";
 import { EmptyState } from "./components/EmptyState";
@@ -32,6 +32,18 @@ import type {
   TodayCourse,
 } from "./types";
 import styles from "./styles/App.module.css";
+
+const subjectGradeOptions = [
+  { label: "信息学算法", children: ["初一", "五年级"] },
+  { label: "信息学语言传播", children: ["五年级"] },
+  { label: "数学思维", children: ["五年级"] },
+];
+
+const courseTypeCourseOptions = [
+  { label: "长期课", children: ["春季课"] },
+  { label: "暑假课", children: ["强化课"] },
+  { label: "秋季课", children: ["同步课"] },
+];
 
 function App() {
   const [activeMainTab, setActiveMainTab] = useState<MainTab>("today");
@@ -151,7 +163,7 @@ function PracticeCenterPage({
           onClick={() => onTabChange("course")}
         >
           <BookOpen size={22} />
-          <span>课程</span>
+          <span>课程课件</span>
         </button>
         <button
           className={`${styles.practiceTab} ${activeTab === "entrance" ? styles.activePracticeTab : ""}`}
@@ -161,7 +173,7 @@ function PracticeCenterPage({
           onClick={() => onTabChange("entrance")}
         >
           <ClipboardList size={22} />
-          <span>入学测</span>
+          <span>入学测课件</span>
         </button>
       </div>
 
@@ -219,16 +231,16 @@ function CoursePracticeTab({ filters, onFiltersChange }: CoursePracticeTabProps)
           options={["马鞍山分校", "合肥分校", "芜湖分校", "南京分校"]}
           onChange={(value) => handleFilter("branch", value)}
         />
-        <SelectField
-          label="科目 / 年级"
+        <CascaderField
+          label="学科 / 年级"
           value={filters.subjectGrade}
-          options={["信息学算法 / 初一", "信息学算法 / 五年级", "数学思维 / 五年级"]}
+          options={subjectGradeOptions}
           onChange={(value) => handleFilter("subjectGrade", value)}
         />
-        <SelectField
+        <CascaderField
           label="课程类型 / 课程"
           value={filters.courseTypeCourse}
-          options={["长期课 / 春季课", "暑假课 / 强化课", "秋季课 / 同步课"]}
+          options={courseTypeCourseOptions}
           onChange={(value) => handleFilter("courseTypeCourse", value)}
         />
         <SelectField
@@ -259,15 +271,11 @@ function CoursePracticeTab({ filters, onFiltersChange }: CoursePracticeTabProps)
 
       <div className={styles.listHeader}>
         <div className={styles.listTitleGroup}>
-          <h2>课程列表</h2>
+          <h2>课件列表</h2>
           <span>
             共找到 <strong>24</strong> 个课程
           </span>
         </div>
-        <button className={styles.sortButton} type="button">
-          默认排序
-          <ChevronDown size={18} />
-        </button>
       </div>
 
       {coursewareList.length > 0 ? (
@@ -323,10 +331,10 @@ function EntrancePracticeTab({ filters, onFiltersChange }: EntrancePracticeTabPr
           options={["马鞍山分校", "合肥分校", "芜湖分校", "南京分校"]}
           onChange={(value) => handleFilter("branch", value)}
         />
-        <SelectField
-          label="科目 / 年级"
+        <CascaderField
+          label="学科 / 年级"
           value={filters.subjectGrade}
-          options={["信息学算法 / 五年级", "数学思维 / 五年级", "信息学算法 / 初一"]}
+          options={subjectGradeOptions}
           onChange={(value) => handleFilter("subjectGrade", value)}
         />
         <label className={styles.searchField}>

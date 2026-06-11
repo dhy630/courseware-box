@@ -12,16 +12,16 @@
   line-height: 1.2;
 }
 
-.selectWrap {
+.controlWrap {
   position: relative;
   min-width: 0;
 }
 
-.selectButton {
+.trigger {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 10px;
+  gap: 8px;
   width: 100%;
   height: 50px;
   min-width: 0;
@@ -34,7 +34,6 @@
   font: inherit;
   font-size: 16px;
   font-weight: 650;
-  line-height: 1;
   cursor: pointer;
   transition:
     border-color 160ms ease,
@@ -42,33 +41,57 @@
     box-shadow 160ms ease;
 }
 
-.selectButton > span:first-child {
+.trigger:hover {
+  border-color: #bfd3ef;
+  background: #ffffff;
+}
+
+.trigger:focus-visible {
+  border-color: #2f7df1;
+  outline: 0;
+  box-shadow: 0 0 0 4px rgba(47, 125, 241, 0.13);
+}
+
+.trigger[aria-expanded="true"] {
+  border-color: #2f7df1;
+  background: #ffffff;
+}
+
+.trigger[aria-expanded="true"] .chevron {
+  background: #eaf3ff;
+  color: #1e6eea;
+  transform: rotate(180deg);
+}
+
+.value {
+  display: inline-flex;
+  flex: 1 1 auto;
+  min-width: 0;
+  align-items: center;
+  gap: 8px;
+}
+
+.value span:not(.divider) {
   min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.selectButton:hover {
-  border-color: #bfd3ef;
-  background: #ffffff;
+.value span:first-child {
+  flex: 1 1 auto;
 }
 
-.selectButton:focus-visible {
-  border-color: #2f7df1;
-  outline: 0;
-  box-shadow: 0 0 0 4px rgba(47, 125, 241, 0.13);
+.value span:last-child {
+  flex: 0 0 auto;
+  color: #31415f;
 }
 
-.selectButton[aria-expanded="true"] {
-  border-color: #2f7df1;
-  background: #ffffff;
-}
-
-.selectButton[aria-expanded="true"] .chevron {
-  background: #eaf3ff;
-  color: #1e6eea;
-  transform: rotate(180deg);
+.divider {
+  flex: 0 0 auto;
+  width: 1px;
+  height: 16px;
+  background: #d7e2f1;
 }
 
 .chevron {
@@ -86,28 +109,43 @@
     background 160ms ease;
 }
 
-.dropdown {
+.panel {
   position: absolute;
-  z-index: 20;
+  z-index: 24;
   top: calc(100% + 8px);
   left: 0;
-  width: max(100%, 180px);
-  max-height: 260px;
-  overflow: auto;
+  display: grid;
+  grid-template-columns: minmax(138px, 1fr) minmax(96px, 0.78fr);
+  gap: 6px;
+  width: max(100%, 320px);
   padding: 6px;
   border: 1px solid #dce7f5;
-  border-radius: 14px;
+  border-radius: 16px;
   background: rgba(255, 255, 255, 0.98);
   box-shadow:
     0 18px 38px rgba(25, 52, 92, 0.12),
     0 4px 12px rgba(25, 52, 92, 0.06);
 }
 
-.option {
+.parentColumn,
+.childColumn {
+  display: grid;
+  gap: 4px;
+  min-width: 0;
+  align-content: start;
+}
+
+.parentColumn {
+  padding-right: 6px;
+  border-right: 1px solid #e7eef8;
+}
+
+.parentOption,
+.childOption {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
+  gap: 10px;
   width: 100%;
   min-height: 42px;
   padding: 0 10px 0 12px;
@@ -122,26 +160,41 @@
   cursor: pointer;
 }
 
-.option:hover,
-.option:focus-visible {
+.parentOption:hover,
+.parentOption:focus-visible,
+.childOption:hover,
+.childOption:focus-visible {
   outline: 0;
   background: #f2f7ff;
   color: #126de5;
 }
 
-.option span {
+.parentOption span,
+.childOption span {
   min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
-.option svg {
+.parentOption svg {
+  flex: 0 0 auto;
+  color: #94a3b8;
+  transform: rotate(-90deg);
+}
+
+.activeParentOption {
+  background: #edf5ff;
+  color: #126de5;
+}
+
+.activeParentOption svg,
+.childOption svg {
   flex: 0 0 auto;
   color: #126de5;
 }
 
-.selectedOption {
+.selectedChildOption {
   background: #edf5ff;
   color: #126de5;
 }

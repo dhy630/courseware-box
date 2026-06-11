@@ -55,20 +55,23 @@
 
 .practicePanel {
   position: relative;
-  padding: 0 26px 26px;
-  border: 1px solid rgba(216, 229, 247, 0.9);
-  border-radius: 28px;
-  background: rgba(255, 255, 255, 0.84);
-  box-shadow: var(--shadow-card);
+  margin-top: -24px;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
 }
 
 .practiceTabs {
   display: inline-flex;
+  gap: 6px;
   overflow: hidden;
-  border: 1px solid #e4edf9;
-  border-top: 0;
-  border-radius: 0 0 14px 14px;
-  background: linear-gradient(180deg, #ffffff 0%, #f6f9fe 100%);
+  margin-bottom: 16px;
+  padding: 6px;
+  border: 1px solid #e0eaf6;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.74);
 }
 
 .practiceTab {
@@ -76,12 +79,13 @@
   align-items: center;
   justify-content: center;
   gap: 12px;
-  min-width: 164px;
-  height: 66px;
+  min-width: 142px;
+  height: 50px;
   border: 0;
+  border-radius: 12px;
   background: transparent;
   color: #5e6b85;
-  font-size: 20px;
+  font-size: 18px;
   font-weight: 700;
 }
 
@@ -91,28 +95,32 @@
 }
 
 .activePracticeTab svg {
-  fill: currentColor;
+  fill: none;
+  stroke: currentColor;
 }
 
 .practiceContent {
-  margin-top: 0;
-  padding: 40px 38px;
-  border: 1px solid #e2ebf7;
-  border-radius: 0 24px 24px;
-  background: rgba(255, 255, 255, 0.72);
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  box-shadow: none;
 }
 
 .filterBar {
   display: grid;
-  grid-template-columns: 150px 160px 210px 210px 140px minmax(190px, 1fr) 86px 86px;
-  gap: 18px;
+  grid-template-columns: 100px 144px minmax(196px, 1.15fr) minmax(196px, 1.15fr) 96px minmax(150px, 0.9fr) 72px 72px;
+  gap: 16px 12px;
   align-items: end;
-  padding-bottom: 34px;
-  border-bottom: 1px solid var(--line);
+  padding: 24px 26px;
+  border: 1px solid #e2ebf7;
+  border-radius: 20px;
+  background: rgba(255, 255, 255, 0.86);
+  box-shadow: 0 6px 18px rgba(38, 74, 118, 0.035);
 }
 
 .entranceFilterBar {
-  grid-template-columns: 150px 180px 230px minmax(240px, 1fr) 86px 86px;
+  grid-template-columns: 112px 168px 292px minmax(318px, 1fr) 76px 76px;
 }
 
 .searchField {
@@ -131,7 +139,7 @@
   display: flex;
   align-items: center;
   gap: 10px;
-  height: 52px;
+  height: 50px;
   padding: 0 16px;
   border: 1px solid #dfe8f5;
   border-radius: 12px;
@@ -155,7 +163,7 @@
 .primaryButton,
 .secondaryButton,
 .sortButton {
-  height: 52px;
+  height: 50px;
   border-radius: 12px;
   font-weight: 700;
 }
@@ -164,7 +172,11 @@
   border: 0;
   background: linear-gradient(180deg, #1284ff 0%, #006ef0 100%);
   color: #ffffff;
-  box-shadow: 0 10px 24px rgba(8, 119, 242, 0.24);
+  cursor: pointer;
+  transition:
+    background 160ms ease,
+    transform 120ms ease,
+    filter 160ms ease;
 }
 
 .secondaryButton,
@@ -172,6 +184,36 @@
   border: 1px solid #dfe8f5;
   background: #ffffff;
   color: var(--text-primary);
+  cursor: pointer;
+  transition:
+    border-color 160ms ease,
+    background 160ms ease,
+    color 160ms ease,
+    transform 120ms ease;
+}
+
+.primaryButton:hover {
+  background: linear-gradient(180deg, #0f7bf0 0%, #0064dc 100%);
+}
+
+.secondaryButton:hover,
+.sortButton:hover {
+  border-color: #bed2ef;
+  background: #f7fbff;
+  color: #126de5;
+}
+
+.primaryButton:active,
+.secondaryButton:active,
+.sortButton:active {
+  transform: translateY(1px) scale(0.985);
+}
+
+.primaryButton:focus-visible,
+.secondaryButton:focus-visible,
+.sortButton:focus-visible {
+  outline: 0;
+  box-shadow: 0 0 0 4px rgba(47, 125, 241, 0.14);
 }
 
 .listHeader {
@@ -179,7 +221,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 24px;
-  margin: 30px 0 20px;
+  margin: 32px 0 20px;
 }
 
 .listTitleGroup {
@@ -235,11 +277,12 @@
   }
 
   .filterBar {
-    grid-template-columns: 130px 150px 190px 190px 120px minmax(170px, 1fr) 78px 78px;
-    gap: 12px;
+    grid-template-columns: 92px 128px minmax(178px, 1fr) minmax(178px, 1fr) 88px minmax(132px, 0.8fr) 64px 64px;
+    gap: 14px 10px;
+    padding: 22px;
   }
 
   .entranceFilterBar {
-    grid-template-columns: 140px 170px 210px minmax(210px, 1fr) 78px 78px;
+    grid-template-columns: 92px 136px 272px minmax(208px, 1fr) 64px 64px;
   }
 }
