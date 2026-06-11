@@ -1,5 +1,6 @@
 .appShell {
   min-height: 100vh;
+  padding-top: 84px;
   background:
     radial-gradient(circle at 16% 0%, rgba(255, 255, 255, 0.96) 0, rgba(255, 255, 255, 0) 30%),
     linear-gradient(180deg, #f8fbff 0%, #edf5ff 46%, #f8fbff 100%);
@@ -310,6 +311,76 @@
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 18px 24px;
+}
+
+.pagination {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 24px;
+  margin-top: 26px;
+  padding: 18px 0 4px;
+}
+
+.paginationSummary {
+  color: #66758f;
+  font-size: 15px;
+  font-weight: 600;
+}
+
+.paginationControls {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pageButton,
+.pageNumber {
+  height: 38px;
+  border: 1px solid #dbe7f6;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.86);
+  color: #41516d;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    border-color 160ms ease,
+    background 160ms ease,
+    color 160ms ease,
+    transform 120ms ease;
+}
+
+.pageButton {
+  padding: 0 14px;
+}
+
+.pageNumber {
+  min-width: 38px;
+  padding: 0 10px;
+}
+
+.pageButton:hover:not(:disabled),
+.pageNumber:hover {
+  border-color: #bed2ef;
+  background: #f4f9ff;
+  color: var(--primary);
+}
+
+.pageButton:active:not(:disabled),
+.pageNumber:active {
+  transform: translateY(1px) scale(0.985);
+}
+
+.pageButton:disabled {
+  color: #a5b0c1;
+  cursor: not-allowed;
+  opacity: 0.62;
+}
+
+.activePageNumber {
+  border-color: var(--primary);
+  background: var(--primary);
+  color: #ffffff;
 }
 
 .visuallyHidden {

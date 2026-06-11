@@ -63,6 +63,12 @@ const courseTypeCourseOptions = [
 ];
 
 const normalizeKeyword = (keyword: string) => keyword.trim().toLowerCase();
+const PAGE_SIZE = 10;
+
+function getPageItems<Item>(items: Item[], page: number) {
+  const start = (page - 1) * PAGE_SIZE;
+  return items.slice(start, start + PAGE_SIZE);
+}
 
 function App() {
   const [activeMainTab, setActiveMainTab] = useState<MainTab>("today");
@@ -220,6 +226,7 @@ interface CoursePracticeTabProps {
 
 function CoursePracticeTab({ filters, onFiltersChange }: CoursePracticeTabProps) {
   const [appliedKeyword, setAppliedKeyword] = useState("");
+  const [page, setPage] = useState(1);
   const filteredCoursewareList = useMemo(() => {
     const keyword = normalizeKeyword(appliedKeyword);
 
@@ -229,6 +236,11 @@ function CoursePracticeTab({ filters, onFiltersChange }: CoursePracticeTabProps)
 
     return coursewareList.filter((item) => item.title.toLowerCase().includes(keyword));
   }, [appliedKeyword]);
+  const totalPages = Math.max(1, Math.ceil(filteredCoursewareList.length / PAGE_SIZE));
+  const pageCoursewareList = useMemo(
+    () => getPageItems(filteredCoursewareList, Math.min(page, totalPages)),
+    [filteredCoursewareList, page, totalPages],
+  );
 
   const handleFilter = <Key extends keyof CourseFilters>(key: Key, value: CourseFilters[Key]) => {
     onFiltersChange({ ...filters, [key]: value });
@@ -237,11 +249,13 @@ function CoursePracticeTab({ filters, onFiltersChange }: CoursePracticeTabProps)
   const handleSearch = () => {
     console.log("课程查询条件", filters);
     setAppliedKeyword(filters.keyword);
+    setPage(1);
   };
 
   const handleReset = () => {
     onFiltersChange(defaultCourseFilters);
     setAppliedKeyword("");
+    setPage(1);
   };
 
   const handleEnterPractice = (item: CoursewareItem) => {
@@ -317,17 +331,25 @@ function CoursePracticeTab({ filters, onFiltersChange }: CoursePracticeTabProps)
         <div className={styles.listTitleGroup}>
           <h2>课程课件列表</h2>
           <span>
-            共找到 <strong>{appliedKeyword ? filteredCoursewareList.length : 24}</strong> 个课程
+            共找到 <strong>{appliedKeyword ? filteredCoursewareList.length : coursewareList.length}</strong> 个课件
           </span>
         </div>
       </div>
 
       {filteredCoursewareList.length > 0 ? (
-        <div className={styles.cardGrid}>
-          {filteredCoursewareList.map((item) => (
-            <CoursewareCard key={item.id} item={item} onAction={handleEnterPractice} />
-          ))}
-        </div>
+        <>
+          <div className={styles.cardGrid}>
+            {pageCoursewareList.map((item) => (
+              <CoursewareCard key={item.id} item={item} onAction={handleEnterPractice} />
+            ))}
+          </div>
+          <Pagination
+            currentPage={Math.min(page, totalPages)}
+            pageSize={PAGE_SIZE}
+            total={filteredCoursewareList.length}
+            onPageChange={setPage}
+          />
+        </>
       ) : (
         <EmptyState title="暂无符合条件的课程" description="请调整筛选条件后重试" />
       )}
@@ -342,6 +364,7 @@ interface EntrancePracticeTabProps {
 
 function EntrancePracticeTab({ filters, onFiltersChange }: EntrancePracticeTabProps) {
   const [appliedKeyword, setAppliedKeyword] = useState("");
+  const [page, setPage] = useState(1);
   const filteredEntranceCoursewareList = useMemo(() => {
     const keyword = normalizeKeyword(appliedKeyword);
 
@@ -351,6 +374,11 @@ function EntrancePracticeTab({ filters, onFiltersChange }: EntrancePracticeTabPr
 
     return entranceCoursewareList.filter((item) => item.title.toLowerCase().includes(keyword));
   }, [appliedKeyword]);
+  const totalPages = Math.max(1, Math.ceil(filteredEntranceCoursewareList.length / PAGE_SIZE));
+  const pageEntranceCoursewareList = useMemo(
+    () => getPageItems(filteredEntranceCoursewareList, Math.min(page, totalPages)),
+    [filteredEntranceCoursewareList, page, totalPages],
+  );
 
   const handleFilter = <Key extends keyof EntranceFilters>(
     key: Key,
@@ -362,11 +390,13 @@ function EntrancePracticeTab({ filters, onFiltersChange }: EntrancePracticeTabPr
   const handleSearch = () => {
     console.log("入学测查询条件", filters);
     setAppliedKeyword(filters.keyword);
+    setPage(1);
   };
 
   const handleReset = () => {
     onFiltersChange(defaultEntranceFilters);
     setAppliedKeyword("");
+    setPage(1);
   };
 
   const handleEnterCourseware = (item: EntranceCoursewareItem) => {
@@ -436,20 +466,82 @@ function EntrancePracticeTab({ filters, onFiltersChange }: EntrancePracticeTabPr
       </div>
 
       {filteredEntranceCoursewareList.length > 0 ? (
-        <div className={styles.cardGrid}>
-          {filteredEntranceCoursewareList.map((item) => (
-            <CoursewareCard
-              key={item.id}
-              item={item}
-              mode="entrance"
-              onAction={handleEnterCourseware}
-            />
-          ))}
-        </div>
+        <>
+          <div className={styles.cardGrid}>
+            {pageEntranceCoursewareList.map((item) => (
+              <CoursewareCard
+                key={item.id}
+                item={item}
+                mode="entrance"
+                onAction={handleEnterCourseware}
+              />
+            ))}
+          </div>
+          <Pagination
+            currentPage={Math.min(page, totalPages)}
+            pageSize={PAGE_SIZE}
+            total={filteredEntranceCoursewareList.length}
+            onPageChange={setPage}
+          />
+        </>
       ) : (
         <EmptyState title="暂无符合条件的入学测课件" description="请调整筛选条件后重试" />
       )}
     </>
+  );
+}
+
+interface PaginationProps {
+  currentPage: number;
+  pageSize: number;
+  total: number;
+  onPageChange: (page: number) => void;
+}
+
+function Pagination({ currentPage, pageSize, total, onPageChange }: PaginationProps) {
+  const totalPages = Math.ceil(total / pageSize);
+
+  if (totalPages <= 1) {
+    return null;
+  }
+
+  const pages = Array.from({ length: totalPages }, (_, index) => index + 1);
+
+  return (
+    <nav className={styles.pagination} aria-label="课件分页">
+      <span className={styles.paginationSummary}>
+        每页 {pageSize} 条，共 {total} 条
+      </span>
+      <div className={styles.paginationControls}>
+        <button
+          className={styles.pageButton}
+          type="button"
+          disabled={currentPage === 1}
+          onClick={() => onPageChange(currentPage - 1)}
+        >
+          上一页
+        </button>
+        {pages.map((page) => (
+          <button
+            className={`${styles.pageNumber} ${page === currentPage ? styles.activePageNumber : ""}`}
+            key={page}
+            type="button"
+            aria-current={page === currentPage ? "page" : undefined}
+            onClick={() => onPageChange(page)}
+          >
+            {page}
+          </button>
+        ))}
+        <button
+          className={styles.pageButton}
+          type="button"
+          disabled={currentPage === totalPages}
+          onClick={() => onPageChange(currentPage + 1)}
+        >
+          下一页
+        </button>
+      </div>
+    </nav>
   );
 }
 
