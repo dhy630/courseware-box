@@ -9,10 +9,16 @@
   align-items: center;
   height: 84px;
   padding: 0 36px;
-  border-bottom: 1px solid rgba(226, 234, 245, 0.9);
-  background: rgba(255, 255, 255, 0.94);
+  border-bottom: 1px solid var(--strong-border);
+  background: var(--header-bg);
   box-shadow: 0 2px 10px rgba(65, 100, 150, 0.035);
   backdrop-filter: blur(12px);
+}
+
+:global([data-theme="dark"]) .header {
+  box-shadow:
+    0 1px 0 rgba(113, 147, 190, 0.24),
+    0 10px 24px rgba(0, 0, 0, 0.28);
 }
 
 .logoGroup {
@@ -51,7 +57,7 @@
   min-width: 116px;
   border: 0;
   background: transparent;
-  color: #4f5f7c;
+  color: var(--text-secondary);
   font-size: 22px;
   font-weight: 750;
 }
@@ -79,7 +85,40 @@
 
 .userArea {
   position: relative;
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
   justify-self: end;
+}
+
+.themeButton {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  height: 40px;
+  padding: 0 12px;
+  border: 1px solid var(--border-color);
+  border-radius: 999px;
+  background: var(--control-bg);
+  color: var(--text-secondary);
+  font-size: 14px;
+  font-weight: 750;
+  transition:
+    border-color 160ms ease,
+    background 160ms ease,
+    color 160ms ease,
+    transform 120ms ease;
+}
+
+.themeButton:hover {
+  border-color: var(--primary);
+  background: var(--active-soft);
+  color: var(--primary);
+}
+
+.themeButton:active {
+  transform: translateY(1px) scale(0.98);
 }
 
 .userButton {
@@ -90,7 +129,7 @@
   height: 66px;
   border: 0;
   background: transparent;
-  color: #25304a;
+  color: var(--text-primary);
 }
 
 .avatar {
@@ -116,7 +155,7 @@
 }
 
 .userText span {
-  color: #63718b;
+  color: var(--text-secondary);
   font-size: 14px;
   font-weight: 650;
 }
@@ -127,10 +166,10 @@
   right: 0;
   width: 214px;
   padding: 10px;
-  border: 1px solid #deebfa;
+  border: 1px solid var(--border-color);
   border-radius: 14px;
-  background: #ffffff;
-  box-shadow: 0 18px 44px rgba(44, 82, 128, 0.16);
+  background: var(--solid-surface);
+  box-shadow: var(--shadow-menu);
 }
 
 .branchLine,
@@ -144,18 +183,18 @@
   border: 0;
   border-radius: 10px;
   background: transparent;
-  color: #344058;
+  color: var(--text-primary);
   text-align: left;
   font-size: 14px;
   font-weight: 650;
 }
 
 .branchLine {
-  color: #66758f;
+  color: var(--muted-text);
   cursor: default;
 }
 
 .userMenu button:hover {
-  background: #f2f7ff;
+  background: var(--control-hover);
   color: var(--primary);
 }

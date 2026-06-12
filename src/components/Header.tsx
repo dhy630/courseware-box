@@ -1,16 +1,27 @@
-import { ChevronDown, LogOut, MapPin, UserRound } from "lucide-react";
+import { ChevronDown, LogOut, MapPin, Moon, Sun, UserRound } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import type { MainTab } from "../types";
 import styles from "../styles/Header.module.css";
 
+type ThemeMode = "light" | "dark";
+
 interface HeaderProps {
   activeTab: MainTab;
   currentBranch: string;
+  themeMode: ThemeMode;
   onTabChange: (tab: MainTab) => void;
+  onThemeToggle: () => void;
   onSwitchBranch: () => void;
 }
 
-export function Header({ activeTab, currentBranch, onTabChange, onSwitchBranch }: HeaderProps) {
+export function Header({
+  activeTab,
+  currentBranch,
+  themeMode,
+  onTabChange,
+  onThemeToggle,
+  onSwitchBranch,
+}: HeaderProps) {
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
 
@@ -62,6 +73,15 @@ export function Header({ activeTab, currentBranch, onTabChange, onSwitchBranch }
       </nav>
 
       <div className={styles.userArea} ref={menuRef}>
+        <button
+          className={styles.themeButton}
+          type="button"
+          aria-label={themeMode === "light" ? "切换黑色模式" : "切换白色模式"}
+          onClick={onThemeToggle}
+        >
+          {themeMode === "light" ? <Moon size={21} /> : <Sun size={21} />}
+          <span>{themeMode === "light" ? "黑色" : "白色"}</span>
+        </button>
         <button
           className={styles.userButton}
           type="button"

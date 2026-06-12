@@ -25,7 +25,7 @@ export function CoursewareCard(props: CoursewareCardProps) {
           {isEntrance ? (
             <>
               <GraduationCap size={16} />
-              入学测
+              森林探秘
             </>
           ) : (
             <>第 {(item as CoursewareItem).lessonNo} 讲</>

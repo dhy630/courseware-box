@@ -33,6 +33,8 @@ import type {
 } from "./types";
 import styles from "./styles/App.module.css";
 
+type ThemeMode = "light" | "dark";
+
 const subjectGradeOptions = [
   {
     label: "信息学算法",
@@ -77,6 +79,7 @@ function App() {
   const [isBranchModalOpen, setIsBranchModalOpen] = useState(false);
   const [courseFilters, setCourseFilters] = useState<CourseFilters>(defaultCourseFilters);
   const [entranceFilters, setEntranceFilters] = useState<EntranceFilters>(defaultEntranceFilters);
+  const [themeMode, setThemeMode] = useState<ThemeMode>("light");
 
   const playerRoute = useMemo(() => PLAYER_ROUTE, []);
 
@@ -92,11 +95,13 @@ function App() {
   };
 
   return (
-    <div className={styles.appShell}>
+    <div className={styles.appShell} data-theme={themeMode}>
       <Header
         activeTab={activeMainTab}
         currentBranch={currentBranch.name}
+        themeMode={themeMode}
         onTabChange={setActiveMainTab}
+        onThemeToggle={() => setThemeMode((mode) => (mode === "light" ? "dark" : "light"))}
         onSwitchBranch={() => setIsBranchModalOpen(true)}
       />
 
@@ -198,7 +203,7 @@ function PracticeCenterPage({
           onClick={() => onTabChange("entrance")}
         >
           <ClipboardList size={22} />
-          <span>入学测课件</span>
+          <span>森林探秘课件</span>
         </button>
       </div>
 
@@ -388,7 +393,7 @@ function EntrancePracticeTab({ filters, onFiltersChange }: EntrancePracticeTabPr
   };
 
   const handleSearch = () => {
-    console.log("入学测查询条件", filters);
+    console.log("森林探秘查询条件", filters);
     setAppliedKeyword(filters.keyword);
     setPage(1);
   };
@@ -458,7 +463,7 @@ function EntrancePracticeTab({ filters, onFiltersChange }: EntrancePracticeTabPr
 
       <div className={styles.listHeader}>
         <div className={styles.listTitleGroup}>
-          <h2>入学测课件列表</h2>
+          <h2>森林探秘课件列表</h2>
           <span>
             共找到 <strong>{appliedKeyword ? filteredEntranceCoursewareList.length : 6}</strong> 个课件
           </span>
@@ -485,7 +490,7 @@ function EntrancePracticeTab({ filters, onFiltersChange }: EntrancePracticeTabPr
           />
         </>
       ) : (
-        <EmptyState title="暂无符合条件的入学测课件" description="请调整筛选条件后重试" />
+        <EmptyState title="暂无符合条件的森林探秘课件" description="请调整筛选条件后重试" />
       )}
     </>
   );
