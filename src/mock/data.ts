@@ -4,6 +4,7 @@ import type {
   CoursewareItem,
   EntranceCoursewareItem,
   EntranceFilters,
+  PublicWelfareFilters,
   TodayCourse,
 } from "../types";
 
@@ -118,6 +119,26 @@ export const coursewareList: CoursewareItem[] = coursewareTitles.map((title, ind
   courseName: "小星星",
 }));
 
+const publicWelfareTitles = [
+  "信息学公益课入门",
+  "图形化编程启蒙",
+  "算法思维体验课",
+  "数学逻辑公益课",
+  "趣味数独挑战",
+  "计算思维公开课",
+  "Scratch 创意作品",
+  "Python 基础体验",
+];
+
+export const publicWelfareCoursewareList: CoursewareItem[] = publicWelfareTitles.map((title, index) => ({
+  id: index + 1,
+  lessonNo: index + 1,
+  title,
+  year: index < 6 ? 2026 : 2025,
+  grade: index % 2 === 0 ? "五年级" : "四年级",
+  courseName: "公益课",
+}));
+
 export const entranceCoursewareList: EntranceCoursewareItem[] = [
   {
     id: 1,
@@ -169,6 +190,13 @@ export const defaultCourseFilters: CourseFilters = {
   subjectGrade: "信息学算法 / 初一",
   courseTypeCourse: "长期课 / 春季课",
   classType: "全部",
+  keyword: "",
+};
+
+export const defaultPublicWelfareFilters: PublicWelfareFilters = {
+  year: "2026",
+  branch: "马鞍山分校",
+  subjectGrade: "信息学算法 / 初一",
   keyword: "",
 };
 

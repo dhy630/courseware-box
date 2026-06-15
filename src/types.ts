@@ -1,6 +1,6 @@
 export type MainTab = "today" | "practice";
 
-export type PracticeTab = "course" | "entrance";
+export type PracticeTab = "course" | "publicWelfare" | "entrance";
 
 export type CoursewareStatus = "LOCAL" | "HEFEI" | "NONE";
 
@@ -47,6 +47,13 @@ export interface CourseFilters {
   subjectGrade: string;
   courseTypeCourse: string;
   classType: string;
+  keyword: string;
+}
+
+export interface PublicWelfareFilters {
+  year: string;
+  branch: string;
+  subjectGrade: string;
   keyword: string;
 }
 

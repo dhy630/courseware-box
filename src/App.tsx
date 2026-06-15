@@ -3,6 +3,7 @@ import {
   BookOpen,
   CalendarDays,
   ClipboardList,
+  HeartHandshake,
   Search,
 } from "lucide-react";
 import { BranchModal } from "./components/BranchModal";
@@ -17,8 +18,10 @@ import {
   coursewareList,
   defaultCourseFilters,
   defaultEntranceFilters,
+  defaultPublicWelfareFilters,
   entranceCoursewareList,
   PLAYER_ROUTE,
+  publicWelfareCoursewareList,
   todayCourses,
 } from "./mock/data";
 import type {
@@ -29,6 +32,7 @@ import type {
   EntranceFilters,
   MainTab,
   PracticeTab,
+  PublicWelfareFilters,
   TodayCourse,
 } from "./types";
 import styles from "./styles/App.module.css";
@@ -78,6 +82,9 @@ function App() {
   const [currentBranch, setCurrentBranch] = useState<Branch>(branches[0]);
   const [isBranchModalOpen, setIsBranchModalOpen] = useState(false);
   const [courseFilters, setCourseFilters] = useState<CourseFilters>(defaultCourseFilters);
+  const [publicWelfareFilters, setPublicWelfareFilters] = useState<PublicWelfareFilters>(
+    defaultPublicWelfareFilters,
+  );
   const [entranceFilters, setEntranceFilters] = useState<EntranceFilters>(defaultEntranceFilters);
   const [themeMode, setThemeMode] = useState<ThemeMode>("light");
 
@@ -112,8 +119,10 @@ function App() {
           <PracticeCenterPage
             activeTab={activePracticeTab}
             courseFilters={courseFilters}
+            publicWelfareFilters={publicWelfareFilters}
             entranceFilters={entranceFilters}
             onCourseFiltersChange={setCourseFilters}
+            onPublicWelfareFiltersChange={setPublicWelfareFilters}
             onEntranceFiltersChange={setEntranceFilters}
             onTabChange={setActivePracticeTab}
           />
@@ -166,18 +175,22 @@ function TodayCoursesPage({ courses, onStartCourse }: TodayCoursesPageProps) {
 interface PracticeCenterPageProps {
   activeTab: PracticeTab;
   courseFilters: CourseFilters;
+  publicWelfareFilters: PublicWelfareFilters;
   entranceFilters: EntranceFilters;
   onTabChange: (tab: PracticeTab) => void;
   onCourseFiltersChange: (filters: CourseFilters) => void;
+  onPublicWelfareFiltersChange: (filters: PublicWelfareFilters) => void;
   onEntranceFiltersChange: (filters: EntranceFilters) => void;
 }
 
 function PracticeCenterPage({
   activeTab,
   courseFilters,
+  publicWelfareFilters,
   entranceFilters,
   onTabChange,
   onCourseFiltersChange,
+  onPublicWelfareFiltersChange,
   onEntranceFiltersChange,
 }: PracticeCenterPageProps) {
   return (
@@ -195,7 +208,17 @@ function PracticeCenterPage({
           onClick={() => onTabChange("course")}
         >
           <BookOpen size={22} />
-          <span>课程课件</span>
+          <span>长短期课程课件</span>
+        </button>
+        <button
+          className={`${styles.practiceTab} ${activeTab === "publicWelfare" ? styles.activePracticeTab : ""}`}
+          type="button"
+          role="tab"
+          aria-selected={activeTab === "publicWelfare"}
+          onClick={() => onTabChange("publicWelfare")}
+        >
+          <HeartHandshake size={22} />
+          <span>公益课课件</span>
         </button>
         <button
           className={`${styles.practiceTab} ${activeTab === "entrance" ? styles.activePracticeTab : ""}`}
@@ -214,6 +237,11 @@ function PracticeCenterPage({
           <CoursePracticeTab
             filters={courseFilters}
             onFiltersChange={onCourseFiltersChange}
+          />
+        ) : activeTab === "publicWelfare" ? (
+          <PublicWelfarePracticeTab
+            filters={publicWelfareFilters}
+            onFiltersChange={onPublicWelfareFiltersChange}
           />
         ) : (
           <EntrancePracticeTab
@@ -361,6 +389,144 @@ function CoursePracticeTab({ filters, onFiltersChange }: CoursePracticeTabProps)
         </>
       ) : (
         <EmptyState title="暂无符合条件的课程" description="请调整筛选条件后重试" />
+      )}
+    </>
+  );
+}
+
+interface PublicWelfarePracticeTabProps {
+  filters: PublicWelfareFilters;
+  onFiltersChange: (filters: PublicWelfareFilters) => void;
+}
+
+function PublicWelfarePracticeTab({
+  filters,
+  onFiltersChange,
+}: PublicWelfarePracticeTabProps) {
+  const [appliedKeyword, setAppliedKeyword] = useState("");
+  const [page, setPage] = useState(1);
+  const filteredPublicWelfareList = useMemo(() => {
+    const keyword = normalizeKeyword(appliedKeyword);
+
+    if (!keyword) {
+      return publicWelfareCoursewareList;
+    }
+
+    return publicWelfareCoursewareList.filter((item) => item.title.toLowerCase().includes(keyword));
+  }, [appliedKeyword]);
+  const totalPages = Math.max(1, Math.ceil(filteredPublicWelfareList.length / PAGE_SIZE));
+  const pagePublicWelfareList = useMemo(
+    () => getPageItems(filteredPublicWelfareList, Math.min(page, totalPages)),
+    [filteredPublicWelfareList, page, totalPages],
+  );
+
+  const handleFilter = <Key extends keyof PublicWelfareFilters>(
+    key: Key,
+    value: PublicWelfareFilters[Key],
+  ) => {
+    onFiltersChange({ ...filters, [key]: value });
+  };
+
+  const handleSearch = () => {
+    console.log("公益课查询条件", filters);
+    setAppliedKeyword(filters.keyword);
+    setPage(1);
+  };
+
+  const handleReset = () => {
+    onFiltersChange(defaultPublicWelfareFilters);
+    setAppliedKeyword("");
+    setPage(1);
+  };
+
+  const handleEnterPractice = (item: CoursewareItem) => {
+    console.log("进入公益课练课", item);
+  };
+
+  return (
+    <>
+      <div className={`${styles.filterBar} ${styles.entranceFilterBar}`}>
+        <SelectField
+          label="年份"
+          value={filters.year}
+          options={["2026", "2025"]}
+          onChange={(value) => handleFilter("year", value)}
+        />
+        <SelectField
+          label="分校"
+          value={filters.branch}
+          options={["马鞍山分校", "合肥分校", "芜湖分校", "南京分校"]}
+          onChange={(value) => handleFilter("branch", value)}
+        />
+        <CascaderField
+          label="学科 / 年级"
+          value={filters.subjectGrade}
+          options={subjectGradeOptions}
+          onChange={(value) => handleFilter("subjectGrade", value)}
+        />
+        <div className={styles.searchRow}>
+          <label className={styles.searchField}>
+            <span>名称搜索</span>
+            <div className={styles.searchControl}>
+              <button
+                className={styles.searchButton}
+                type="button"
+                aria-label="搜索课件名称"
+                onClick={handleSearch}
+              >
+                <Search size={20} />
+              </button>
+              <input
+                type="search"
+                value={filters.keyword}
+                placeholder="搜索课件"
+                onChange={(event) => handleFilter("keyword", event.target.value)}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter") {
+                    handleSearch();
+                  }
+                }}
+              />
+            </div>
+          </label>
+          <button className={styles.primaryButton} type="button" onClick={handleSearch}>
+            查询
+          </button>
+          <button className={styles.secondaryButton} type="button" onClick={handleReset}>
+            重置
+          </button>
+        </div>
+      </div>
+
+      <div className={styles.listHeader}>
+        <div className={styles.listTitleGroup}>
+          <h2>公益课课件列表</h2>
+          <span>
+            共找到{" "}
+            <strong>
+              {appliedKeyword ? filteredPublicWelfareList.length : publicWelfareCoursewareList.length}
+            </strong>{" "}
+            个课件
+          </span>
+        </div>
+      </div>
+
+      {filteredPublicWelfareList.length > 0 ? (
+        <>
+          <div className={styles.cardGrid}>
+            {pagePublicWelfareList.map((item) => (
+              <CoursewareCard key={item.id} item={item} onAction={handleEnterPractice} />
+            ))}
+          </div>
+          <Pagination
+            currentPage={Math.min(page, totalPages)}
+            pageSize={PAGE_SIZE}
+            total={filteredPublicWelfareList.length}
+            onPageChange={setPage}
+          />
+        </>
+      ) : (
+        <EmptyState title="暂无符合条件的公益课" description="请调整筛选条件后重试" />
       )}
     </>
   );
