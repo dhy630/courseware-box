@@ -187,9 +187,17 @@ export const entranceCoursewareList: EntranceCoursewareItem[] = [
 export const defaultCourseFilters: CourseFilters = {
   year: "2026",
   branch: "马鞍山分校",
-  subjectGrade: "信息学算法 / 初一",
-  courseTypeCourse: "长期课 / 春季课",
-  classType: "全部",
+  scope: {
+    subject: "信息学算法",
+    courseType: "长期课-暑假课",
+    grades: ["五年级", "六年级"],
+    courses: [
+      "2026五年级信息学算法暑假课",
+      "2026五年级信息学算法暑假课【衔接班】",
+      "2026六年级信息学算法暑假课",
+    ],
+    classTypes: ["小星星", "小月亮"],
+  },
   keyword: "",
 };
 

@@ -9,6 +9,7 @@ import {
 import { BranchModal } from "./components/BranchModal";
 import { CascaderField } from "./components/CascaderField";
 import { CourseCard } from "./components/CourseCard";
+import { CourseScopeField } from "./components/CourseScopeField";
 import { CoursewareCard } from "./components/CoursewareCard";
 import { EmptyState } from "./components/EmptyState";
 import { Header } from "./components/Header";
@@ -60,12 +61,6 @@ const subjectGradeOptions = [
     label: "信息学实验C",
     children: ["一年级", "二年级", "三年级", "四年级", "五年级", "六年级", "初一"],
   },
-];
-
-const courseTypeCourseOptions = [
-  { label: "长期课", children: ["春季课", "暑假课", "秋季课", "寒假课"] },
-  { label: "短期课", children: ["短期课", "春季短期课", "暑假短期课", "秋季短期课", "寒假短期课"] },
-  { label: "公益课", children: [] },
 ];
 
 const normalizeKeyword = (keyword: string) => keyword.trim().toLowerCase();
@@ -299,7 +294,7 @@ function CoursePracticeTab({ filters, onFiltersChange }: CoursePracticeTabProps)
 
   return (
     <>
-      <div className={styles.filterBar}>
+      <div className={`${styles.filterBar} ${styles.courseFilterBar}`}>
         <SelectField
           label="年份"
           value={filters.year}
@@ -312,23 +307,11 @@ function CoursePracticeTab({ filters, onFiltersChange }: CoursePracticeTabProps)
           options={["马鞍山分校", "合肥分校", "芜湖分校", "南京分校"]}
           onChange={(value) => handleFilter("branch", value)}
         />
-        <CascaderField
-          label="学科 / 年级"
-          value={filters.subjectGrade}
-          options={subjectGradeOptions}
-          onChange={(value) => handleFilter("subjectGrade", value)}
-        />
-        <CascaderField
-          label="课程类型"
-          value={filters.courseTypeCourse}
-          options={courseTypeCourseOptions}
-          onChange={(value) => handleFilter("courseTypeCourse", value)}
-        />
-        <SelectField
-          label="班型"
-          value={filters.classType}
-          options={["全部", "小班", "精品班"]}
-          onChange={(value) => handleFilter("classType", value)}
+        <CourseScopeField
+          label="课程范围"
+          year={filters.year}
+          value={filters.scope}
+          onChange={(value) => handleFilter("scope", value)}
         />
         <div className={styles.searchRow}>
           <label className={styles.searchField}>

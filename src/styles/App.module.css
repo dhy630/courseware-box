@@ -212,6 +212,10 @@
   grid-template-columns: 112px 168px 292px minmax(318px, 1fr) 76px 76px;
 }
 
+.courseFilterBar {
+  grid-template-columns: 112px 168px minmax(440px, 1fr) minmax(220px, 0.58fr) 76px 76px;
+}
+
 .searchRow {
   display: contents;
 }
@@ -503,6 +507,10 @@
   .entranceFilterBar {
     grid-template-columns: 92px 136px 272px minmax(208px, 1fr) 64px 64px;
   }
+
+  .courseFilterBar {
+    grid-template-columns: 92px 136px minmax(310px, 1fr) minmax(150px, 0.55fr) 64px 64px;
+  }
 }
 
 @media (max-width: 1600px) {
@@ -514,6 +522,10 @@
 
   .entranceFilterBar {
     grid-template-columns: 112px 160px minmax(240px, 1fr) minmax(140px, 0.6fr) 76px 76px;
+  }
+
+  .courseFilterBar {
+    grid-template-columns: 112px 160px minmax(420px, 1fr) minmax(170px, 0.55fr) 76px 76px;
   }
 }
 
@@ -576,59 +588,19 @@
     border-radius: 18px;
   }
 
-  .filterBar:not(.entranceFilterBar) {
-    grid-template-columns: 128px 176px minmax(160px, 1fr) minmax(160px, 1fr) 72px 72px;
-  }
-
-  .filterBar:not(.entranceFilterBar) > :nth-child(1) {
-    grid-column: 1;
-  }
-
-  .filterBar:not(.entranceFilterBar) > :nth-child(2) {
-    grid-column: 2;
-  }
-
-  .filterBar:not(.entranceFilterBar) > :nth-child(3) {
-    grid-column: 3 / 7;
-  }
-
-  .filterBar:not(.entranceFilterBar) > :nth-child(4) {
-    grid-column: 1 / 3;
-  }
-
-  .filterBar:not(.entranceFilterBar) > :nth-child(5) {
-    grid-column: 3;
-  }
-
-  .filterBar:not(.entranceFilterBar) .searchField {
-    grid-column: 4;
-  }
-
-  .filterBar:not(.entranceFilterBar) .primaryButton {
-    grid-column: 5;
-  }
-
-  .filterBar:not(.entranceFilterBar) .secondaryButton {
-    grid-column: 6;
-  }
-
-  .filterBar:not(.entranceFilterBar) .searchControl,
-  .filterBar:not(.entranceFilterBar) .primaryButton,
-  .filterBar:not(.entranceFilterBar) .secondaryButton {
-    height: 50px;
-    border-radius: 12px;
-  }
-
-  .filterBar:not(.entranceFilterBar) .primaryButton,
-  .filterBar:not(.entranceFilterBar) .secondaryButton {
-    width: 72px;
-  }
-
   .entranceFilterBar {
     grid-template-columns: 112px 160px minmax(360px, 1fr) minmax(150px, 0.5fr) 76px 76px;
     gap: 14px 10px;
   }
 
+  .courseFilterBar {
+    grid-template-columns: 112px 160px minmax(360px, 1fr) minmax(150px, 0.5fr) 76px 76px;
+    gap: 14px 10px;
+  }
+
+  .courseFilterBar .searchControl,
+  .courseFilterBar .primaryButton,
+  .courseFilterBar .secondaryButton,
   .entranceFilterBar .searchControl,
   .entranceFilterBar .primaryButton,
   .entranceFilterBar .secondaryButton {
@@ -745,15 +717,19 @@
     border-radius: 16px;
   }
 
-  .filterBar:not(.entranceFilterBar) {
-    grid-template-columns: 128px 176px minmax(112px, 1fr) minmax(112px, 1fr) 72px 72px;
-  }
-
   .entranceFilterBar {
     grid-template-columns: 112px 160px minmax(268px, 1fr) minmax(178px, 0.75fr) 68px 68px;
     gap: 12px 8px;
   }
 
+  .courseFilterBar {
+    grid-template-columns: 112px 150px minmax(280px, 1fr) minmax(126px, 0.52fr) 68px 68px;
+    gap: 12px 8px;
+  }
+
+  .courseFilterBar .searchControl,
+  .courseFilterBar .primaryButton,
+  .courseFilterBar .secondaryButton,
   .entranceFilterBar .searchControl,
   .entranceFilterBar .primaryButton,
   .entranceFilterBar .secondaryButton {
@@ -777,28 +753,9 @@
     font-size: 14px;
   }
 
-  .filterBar:not(.entranceFilterBar) .searchField {
-    grid-column: 4;
-  }
-
-  .filterBar:not(.entranceFilterBar) .primaryButton {
-    grid-column: 5;
-  }
-
-  .filterBar:not(.entranceFilterBar) .secondaryButton {
-    grid-column: 6;
-  }
-
-  .filterBar:not(.entranceFilterBar) .searchControl,
-  .filterBar:not(.entranceFilterBar) .primaryButton,
-  .filterBar:not(.entranceFilterBar) .secondaryButton {
-    height: 50px;
-    border-radius: 12px;
-  }
-
-  .filterBar:not(.entranceFilterBar) .primaryButton,
-  .filterBar:not(.entranceFilterBar) .secondaryButton {
+  .courseFilterBar .primaryButton,
+  .courseFilterBar .secondaryButton {
     justify-self: end;
-    width: 72px;
+    width: 68px;
   }
 }
