@@ -44,7 +44,7 @@ export function CourseCard({ course, onStartCourse }: CourseCardProps) {
           <BookOpen size={22} />
           <strong>第 {course.lessonNo} 讲</strong>
           <span className={styles.separator} />
-          <span>{course.lessonTitle}</span>
+          <span className={styles.lessonTitle}>{course.lessonTitle}</span>
         </div>
       </div>
 

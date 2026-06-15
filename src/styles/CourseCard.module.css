@@ -5,6 +5,7 @@
   position: relative;
   display: flex;
   min-height: 424px;
+  min-width: 0;
   flex-direction: column;
   overflow: hidden;
   padding: 24px;
@@ -144,15 +145,20 @@
 .courseTitle {
   margin: 0 0 22px;
   color: var(--text-primary);
+  display: -webkit-box;
+  overflow: hidden;
   font-size: 25px;
   font-weight: 800;
   line-height: 1.32;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
 }
 
 .lessonRow {
   display: flex;
   align-items: center;
   gap: 10px;
+  min-width: 0;
   color: var(--text-primary);
   font-size: 17px;
   font-weight: 650;
@@ -164,10 +170,18 @@
 }
 
 .separator {
+  flex: 0 0 auto;
   width: 4px;
   height: 4px;
   border-radius: 50%;
   background: var(--border-color);
+}
+
+.lessonTitle {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .messageArea {
@@ -264,4 +278,156 @@
   border: 0;
   background: var(--soft-surface);
   color: var(--text-muted);
+}
+
+@media (max-width: 1366px), (max-height: 800px) {
+  .card {
+    min-height: 360px;
+    padding: 22px;
+    border-radius: 16px;
+  }
+
+  .cardAccent {
+    top: -50px;
+    right: -68px;
+    width: 150px;
+    height: 112px;
+  }
+
+  .card::after {
+    top: 23px;
+    right: 24px;
+    width: 48px;
+  }
+
+  .cardTop {
+    min-height: 46px;
+    margin-bottom: 20px;
+  }
+
+  .scheduleMark {
+    width: 38px;
+    height: 38px;
+    border-radius: 14px 14px 14px 6px;
+  }
+
+  .titleBlock {
+    padding: 18px 0 16px;
+  }
+
+  .courseTitle {
+    margin-bottom: 18px;
+    font-size: 23px;
+  }
+
+  .lessonRow {
+    font-size: 16px;
+  }
+
+  .lessonRow svg {
+    width: 20px;
+    height: 20px;
+  }
+
+  .messageArea {
+    min-height: 58px;
+    margin-bottom: 14px;
+  }
+
+  .actionButton {
+    height: 48px;
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 1100px) {
+  .card {
+    min-height: 300px;
+    padding: 18px;
+    border-radius: 14px;
+  }
+
+  .cardAccent {
+    top: -58px;
+    right: -76px;
+    width: 132px;
+    height: 96px;
+  }
+
+  .card::after {
+    top: 20px;
+    right: 20px;
+    width: 40px;
+    height: 5px;
+  }
+
+  .cardTop {
+    min-height: 40px;
+    margin-bottom: 16px;
+  }
+
+  .scheduleMark {
+    width: 34px;
+    height: 34px;
+    border-radius: 12px 12px 12px 5px;
+  }
+
+  .scheduleMark svg {
+    width: 15px;
+    height: 15px;
+  }
+
+  .scheduleText span,
+  .scheduleText strong {
+    font-size: 14px;
+  }
+
+  .scheduleText strong svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .titleBlock {
+    padding: 14px 0 12px;
+  }
+
+  .courseTitle {
+    margin-bottom: 14px;
+    font-size: 20px;
+    line-height: 1.3;
+  }
+
+  .lessonRow {
+    gap: 8px;
+    font-size: 14px;
+  }
+
+  .lessonRow svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .messageArea {
+    min-height: 44px;
+    margin-bottom: 12px;
+  }
+
+  .warningMessage,
+  .mutedMessage {
+    gap: 6px;
+    font-size: 12px;
+    line-height: 1.35;
+  }
+
+  .warningMessage svg,
+  .mutedMessage svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  .actionButton {
+    height: 42px;
+    border-radius: 10px;
+    font-size: 15px;
+  }
 }

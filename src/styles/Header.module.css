@@ -93,9 +93,11 @@
 
 .themeButton {
   display: inline-flex;
+  flex: 0 0 auto;
   align-items: center;
   justify-content: center;
   gap: 7px;
+  min-width: 76px;
   height: 40px;
   padding: 0 12px;
   border: 1px solid var(--border-color);
@@ -104,6 +106,7 @@
   color: var(--text-secondary);
   font-size: 14px;
   font-weight: 750;
+  white-space: nowrap;
   transition:
     border-color 160ms ease,
     background 160ms ease,
@@ -197,4 +200,153 @@
 .userMenu button:hover {
   background: var(--control-hover);
   color: var(--primary);
+}
+
+@media (max-width: 1366px), (max-height: 800px) {
+  .header {
+    grid-template-columns: 240px 1fr 300px;
+    height: 64px;
+    padding: 0 32px;
+  }
+
+  .logoGroup {
+    gap: 12px;
+    font-size: 21px;
+  }
+
+  .logoMark {
+    width: 34px;
+    height: 34px;
+    border-radius: 10px;
+    font-size: 23px;
+  }
+
+  .nav {
+    gap: 28px;
+  }
+
+  .navButton {
+    min-width: 98px;
+    font-size: 18px;
+  }
+
+  .navButton::after {
+    width: 94px;
+    height: 3px;
+  }
+
+  .themeButton {
+    min-width: 72px;
+    height: 36px;
+    padding: 0 10px;
+    font-size: 13px;
+  }
+
+  .themeButton svg {
+    width: 18px;
+    height: 18px;
+  }
+
+  .userButton {
+    gap: 10px;
+    min-width: 178px;
+    height: 56px;
+  }
+
+  .avatar {
+    width: 44px;
+    height: 44px;
+  }
+
+  .avatar svg {
+    width: 25px;
+    height: 25px;
+  }
+
+  .userText strong {
+    font-size: 16px;
+  }
+
+  .userText span {
+    font-size: 12px;
+  }
+}
+
+@media (max-width: 1100px) {
+  .header {
+    grid-template-columns: 166px 1fr 220px;
+    height: 56px;
+    padding: 0 16px;
+  }
+
+  .logoGroup {
+    gap: 10px;
+    font-size: 18px;
+  }
+
+  .logoMark {
+    width: 30px;
+    height: 30px;
+    border-radius: 9px;
+    font-size: 20px;
+  }
+
+  .nav {
+    gap: 8px;
+  }
+
+  .navButton {
+    min-width: 76px;
+    font-size: 16px;
+  }
+
+  .navButton::after {
+    width: 74px;
+  }
+
+  .themeButton {
+    min-width: 70px;
+    height: 34px;
+    padding: 0 9px;
+    gap: 6px;
+    font-size: 13px;
+  }
+
+  .themeButton svg {
+    width: 17px;
+    height: 17px;
+  }
+
+  .userButton {
+    min-width: 0;
+    height: 50px;
+    gap: 7px;
+  }
+
+  .avatar {
+    width: 36px;
+    height: 36px;
+  }
+
+  .avatar svg {
+    width: 21px;
+    height: 21px;
+  }
+
+  .userText {
+    min-width: 0;
+  }
+
+  .userText strong {
+    font-size: 15px;
+  }
+
+  .userText span {
+    display: none;
+  }
+
+  .userButton > svg {
+    width: 18px;
+    height: 18px;
+  }
 }

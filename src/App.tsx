@@ -148,10 +148,12 @@ function TodayCoursesPage({ courses, onStartCourse }: TodayCoursesPageProps) {
       </div>
 
       {courses.length > 0 ? (
-        <div className={styles.todayGrid}>
-          {courses.map((course) => (
-            <CourseCard key={course.id} course={course} onStartCourse={onStartCourse} />
-          ))}
+        <div className={styles.todayGridWrapper}>
+          <div className={styles.todayGrid}>
+            {courses.map((course) => (
+              <CourseCard key={course.id} course={course} onStartCourse={onStartCourse} />
+            ))}
+          </div>
         </div>
       ) : (
         <EmptyState title="今日暂无课程" description="请切换日期查看其他课程安排" />
@@ -289,7 +291,7 @@ function CoursePracticeTab({ filters, onFiltersChange }: CoursePracticeTabProps)
           onChange={(value) => handleFilter("subjectGrade", value)}
         />
         <CascaderField
-          label="课程类型 / 课程"
+          label="课程类型"
           value={filters.courseTypeCourse}
           options={courseTypeCourseOptions}
           onChange={(value) => handleFilter("courseTypeCourse", value)}
@@ -300,36 +302,38 @@ function CoursePracticeTab({ filters, onFiltersChange }: CoursePracticeTabProps)
           options={["全部", "小班", "精品班"]}
           onChange={(value) => handleFilter("classType", value)}
         />
-        <label className={styles.searchField}>
-          <span>课件名称搜索</span>
-          <div className={styles.searchControl}>
-            <button
-              className={styles.searchButton}
-              type="button"
-              aria-label="搜索课件名称"
-              onClick={handleSearch}
-            >
-              <Search size={20} />
-            </button>
-            <input
-              type="search"
-              value={filters.keyword}
-              placeholder="搜索课件名称"
-              onChange={(event) => handleFilter("keyword", event.target.value)}
-              onKeyDown={(event) => {
-                if (event.key === "Enter") {
-                  handleSearch();
-                }
-              }}
-            />
-          </div>
-        </label>
-        <button className={styles.primaryButton} type="button" onClick={handleSearch}>
-          查询
-        </button>
-        <button className={styles.secondaryButton} type="button" onClick={handleReset}>
-          重置
-        </button>
+        <div className={styles.searchRow}>
+          <label className={styles.searchField}>
+            <span>名称搜索</span>
+            <div className={styles.searchControl}>
+              <button
+                className={styles.searchButton}
+                type="button"
+                aria-label="搜索课件名称"
+                onClick={handleSearch}
+              >
+                <Search size={20} />
+              </button>
+              <input
+                type="search"
+                value={filters.keyword}
+                placeholder="搜索课件"
+                onChange={(event) => handleFilter("keyword", event.target.value)}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter") {
+                    handleSearch();
+                  }
+                }}
+              />
+            </div>
+          </label>
+          <button className={styles.primaryButton} type="button" onClick={handleSearch}>
+            查询
+          </button>
+          <button className={styles.secondaryButton} type="button" onClick={handleReset}>
+            重置
+          </button>
+        </div>
       </div>
 
       <div className={styles.listHeader}>
@@ -429,36 +433,38 @@ function EntrancePracticeTab({ filters, onFiltersChange }: EntrancePracticeTabPr
           options={subjectGradeOptions}
           onChange={(value) => handleFilter("subjectGrade", value)}
         />
-        <label className={styles.searchField}>
-          <span>名称搜索</span>
-          <div className={styles.searchControl}>
-            <button
-              className={styles.searchButton}
-              type="button"
-              aria-label="搜索课件名称"
-              onClick={handleSearch}
-            >
-              <Search size={20} />
-            </button>
-            <input
-              type="search"
-              value={filters.keyword}
-              placeholder="搜索课件名称"
-              onChange={(event) => handleFilter("keyword", event.target.value)}
-              onKeyDown={(event) => {
-                if (event.key === "Enter") {
-                  handleSearch();
-                }
-              }}
-            />
-          </div>
-        </label>
-        <button className={styles.primaryButton} type="button" onClick={handleSearch}>
-          查询
-        </button>
-        <button className={styles.secondaryButton} type="button" onClick={handleReset}>
-          重置
-        </button>
+        <div className={styles.searchRow}>
+          <label className={styles.searchField}>
+            <span>名称搜索</span>
+            <div className={styles.searchControl}>
+              <button
+                className={styles.searchButton}
+                type="button"
+                aria-label="搜索课件名称"
+                onClick={handleSearch}
+              >
+                <Search size={20} />
+              </button>
+              <input
+                type="search"
+                value={filters.keyword}
+                placeholder="搜索课件"
+                onChange={(event) => handleFilter("keyword", event.target.value)}
+                onKeyDown={(event) => {
+                  if (event.key === "Enter") {
+                    handleSearch();
+                  }
+                }}
+              />
+            </div>
+          </label>
+          <button className={styles.primaryButton} type="button" onClick={handleSearch}>
+            查询
+          </button>
+          <button className={styles.secondaryButton} type="button" onClick={handleReset}>
+            重置
+          </button>
+        </div>
       </div>
 
       <div className={styles.listHeader}>
