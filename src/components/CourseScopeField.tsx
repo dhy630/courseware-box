@@ -37,7 +37,7 @@ const getCourseSeason = (courseType: string) => {
 };
 
 const buildCourses = (year: string, selection: CourseScopeSelection) => {
-  const selectedGrades = selection.grades.length > 0 ? selection.grades : grades;
+  const selectedGrades = selection.grades.length > 0 ? [selection.grades[0]] : [grades[0]];
   const season = getCourseSeason(selection.courseType);
 
   return selectedGrades.flatMap((grade) => {
@@ -68,8 +68,8 @@ export function CourseScopeField({ label, year, value, onChange }: CourseScopeFi
       [
         value.subject,
         value.courseType,
-        value.grades.length > 0 ? `已选${value.grades.length}个年级` : "未选年级",
-        value.courses.length > 0 ? `已选${value.courses.length}个课程` : "未选课程",
+        value.grades[0] ?? "未选年级",
+        value.courses[0] ?? "未选课程",
         value.classTypes.length > 0 ? `已选${value.classTypes.length}个班型` : "未选班型",
       ].join(" / "),
     [value],
@@ -123,9 +123,9 @@ export function CourseScopeField({ label, year, value, onChange }: CourseScopeFi
 
   const updateDraft = (next: CourseScopeSelection) => {
     const availableCourses = buildCourses(year, next);
-    const courses = trimSelected(next.courses, availableCourses);
+    const courses = trimSelected(next.courses.slice(0, 1), availableCourses);
 
-    setDraft({ ...next, courses });
+    setDraft({ ...next, courses: courses.length > 0 ? courses : [availableCourses[0]] });
   };
 
   const handleSubjectSelect = (subject: string) => {
@@ -137,11 +137,11 @@ export function CourseScopeField({ label, year, value, onChange }: CourseScopeFi
   };
 
   const handleGradeToggle = (grade: string) => {
-    updateDraft({ ...draft, grades: toggleValue(draft.grades, grade) });
+    updateDraft({ ...draft, grades: [grade] });
   };
 
   const handleCourseToggle = (course: string) => {
-    setDraft({ ...draft, courses: toggleValue(draft.courses, course) });
+    setDraft({ ...draft, courses: [course] });
   };
 
   const handleClassTypeToggle = (classType: string) => {
@@ -152,8 +152,8 @@ export function CourseScopeField({ label, year, value, onChange }: CourseScopeFi
     setDraft({
       subject: subjects[0],
       courseType: courseTypes[0],
-      grades: [],
-      courses: [],
+      grades: [grades[0]],
+      courses: [buildCourses(year, { ...draft, subject: subjects[0], courseType: courseTypes[0], grades: [grades[0]] })[0]],
       classTypes: [],
     });
   };
@@ -205,17 +205,17 @@ export function CourseScopeField({ label, year, value, onChange }: CourseScopeFi
               onSelect={handleCourseTypeSelect}
             />
             <ChoiceColumn
-              title="年级（多选）"
+              title="年级"
               options={grades}
               selected={draft.grades}
-              mode="checkbox"
+              mode="radio"
               onSelect={handleGradeToggle}
             />
             <ChoiceColumn
-              title="课程（多选）"
+              title="课程"
               options={courseOptions}
               selected={draft.courses}
-              mode="checkbox"
+              mode="radio"
               wide
               onSelect={handleCourseToggle}
             />

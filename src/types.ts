@@ -31,6 +31,7 @@ export interface CoursewareItem {
   year: number;
   grade: string;
   courseName: string;
+  createdAt?: string;
 }
 
 export interface EntranceCoursewareItem {
@@ -39,6 +40,7 @@ export interface EntranceCoursewareItem {
   year: number;
   grade: string;
   subject: string;
+  createdAt?: string;
 }
 
 export interface CourseScopeSelection {

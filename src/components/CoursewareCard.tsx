@@ -6,7 +6,8 @@ type CoursewareCardProps =
   | {
       item: CoursewareItem;
       mode?: "course";
-      onAction: (item: CoursewareItem) => void;
+      actionLabels?: string[];
+      onAction: (item: CoursewareItem, actionLabel?: string) => void;
     }
   | {
       item: EntranceCoursewareItem;
@@ -17,9 +18,13 @@ type CoursewareCardProps =
 export function CoursewareCard(props: CoursewareCardProps) {
   const { item } = props;
   const isEntrance = props.mode === "entrance";
+  const actionLabels = "actionLabels" in props ? props.actionLabels : undefined;
+  const isCourseWithClassEntrances =
+    !isEntrance && Boolean(actionLabels?.length);
+  const hasSingleAction = isEntrance || !actionLabels?.length;
 
   return (
-    <article className={styles.card}>
+    <article className={`${styles.card} ${hasSingleAction ? styles.singleActionCard : ""}`}>
       <div className={styles.content}>
         <span className={styles.tag}>
           {isEntrance ? (
@@ -37,8 +42,12 @@ export function CoursewareCard(props: CoursewareCardProps) {
             <CalendarDays size={16} />
             {item.year}
           </span>
-          <i />
-          <span>{item.grade}</span>
+          {isCourseWithClassEntrances ? null : (
+            <>
+              <i />
+              <span>{item.grade}</span>
+            </>
+          )}
           <i />
           <span>{isEntrance ? (item as EntranceCoursewareItem).subject : (item as CoursewareItem).courseName}</span>
         </div>
@@ -46,19 +55,34 @@ export function CoursewareCard(props: CoursewareCardProps) {
       <div className={styles.cardWatermark} aria-hidden="true">
         <BookOpen size={112} />
       </div>
-      <button
-        className={styles.action}
-        type="button"
-        onClick={() => {
-          if (isEntrance) {
-            props.onAction(item as EntranceCoursewareItem);
-          } else {
-            props.onAction(item as CoursewareItem);
-          }
-        }}
-      >
-        {isEntrance ? "进入课件" : "进入练课"}
-      </button>
+      {hasSingleAction ? (
+        <button
+          className={styles.action}
+          type="button"
+          onClick={() => {
+            if (isEntrance) {
+              props.onAction(item as EntranceCoursewareItem);
+            } else {
+              props.onAction(item as CoursewareItem);
+            }
+          }}
+        >
+          {isEntrance ? "进入课件" : "进入练课"}
+        </button>
+      ) : (
+        <div className={styles.actionGroup} aria-label="选择班型课件入口">
+          {actionLabels.map((label) => (
+            <button
+              className={styles.action}
+              type="button"
+              key={label}
+              onClick={() => props.onAction(item as CoursewareItem, label)}
+            >
+              {label}
+            </button>
+          ))}
+        </div>
+      )}
     </article>
   );
 }

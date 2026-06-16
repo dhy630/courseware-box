@@ -194,6 +194,9 @@
 
 .filterBar {
   display: grid;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
   grid-template-columns: 100px 144px minmax(196px, 1.15fr) minmax(196px, 1.15fr) 96px minmax(150px, 0.9fr) 72px 72px;
   gap: 16px 12px;
   align-items: end;
@@ -380,7 +383,7 @@
 .listTitleGroup h2 {
   margin: 0;
   color: var(--text-primary);
-  font-size: 28px;
+  font-size: 24px;
   line-height: 1.2;
 }
 
@@ -398,15 +401,24 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 24px;
-  width: 144px;
+  gap: 8px;
+  min-width: 132px;
+  padding: 0 16px;
   color: var(--text-primary);
+}
+
+.sortButton svg {
+  color: var(--primary);
 }
 
 .cardGrid {
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 18px 24px;
+}
+
+.courseCardGrid {
+  grid-template-columns: minmax(0, 1fr);
 }
 
 .pagination {
@@ -718,12 +730,12 @@
   }
 
   .entranceFilterBar {
-    grid-template-columns: 112px 160px minmax(268px, 1fr) minmax(178px, 0.75fr) 68px 68px;
+    grid-template-columns: 90px 132px minmax(210px, 1fr) minmax(110px, 0.48fr) 60px 60px;
     gap: 12px 8px;
   }
 
   .courseFilterBar {
-    grid-template-columns: 112px 150px minmax(280px, 1fr) minmax(126px, 0.52fr) 68px 68px;
+    grid-template-columns: 90px 132px minmax(230px, 1fr) minmax(110px, 0.46fr) 60px 60px;
     gap: 12px 8px;
   }
 
@@ -745,7 +757,7 @@
   }
 
   .searchControl {
-    padding: 0 13px;
+    padding: 0 10px;
   }
 
   .primaryButton,
@@ -753,9 +765,11 @@
     font-size: 14px;
   }
 
+  .entranceFilterBar .primaryButton,
+  .entranceFilterBar .secondaryButton,
   .courseFilterBar .primaryButton,
   .courseFilterBar .secondaryButton {
     justify-self: end;
-    width: 68px;
+    width: 60px;
   }
 }

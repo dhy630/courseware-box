@@ -1,5 +1,7 @@
 import { useMemo, useState } from "react";
 import {
+  ArrowDown01,
+  ArrowUp01,
   BookOpen,
   CalendarDays,
   ClipboardList,
@@ -39,6 +41,7 @@ import type {
 import styles from "./styles/App.module.css";
 
 type ThemeMode = "light" | "dark";
+type SortDirection = "asc" | "desc";
 
 const subjectGradeOptions = [
   {
@@ -65,11 +68,28 @@ const subjectGradeOptions = [
 
 const normalizeKeyword = (keyword: string) => keyword.trim().toLowerCase();
 const PAGE_SIZE = 10;
+const gradeLabels = ["一年级", "二年级", "三年级", "四年级", "五年级", "六年级", "初一"];
 
 function getPageItems<Item>(items: Item[], page: number) {
   const start = (page - 1) * PAGE_SIZE;
   return items.slice(start, start + PAGE_SIZE);
 }
+
+const getCourseGrade = (courseName: string, fallbackGrade: string) =>
+  gradeLabels.find((grade) => courseName.includes(grade)) ?? fallbackGrade;
+
+const getCreatedTime = (item: { createdAt?: string }) =>
+  item.createdAt ? Date.parse(item.createdAt) : 0;
+
+const sortByCreatedAt = <Item extends { createdAt?: string }>(
+  items: Item[],
+  direction: SortDirection,
+) =>
+  [...items].sort((current, next) =>
+    direction === "desc"
+      ? getCreatedTime(next) - getCreatedTime(current)
+      : getCreatedTime(current) - getCreatedTime(next),
+  );
 
 function App() {
   const [activeMainTab, setActiveMainTab] = useState<MainTab>("today");
@@ -203,7 +223,7 @@ function PracticeCenterPage({
           onClick={() => onTabChange("course")}
         >
           <BookOpen size={22} />
-          <span>长短期课程课件</span>
+          <span>长短期课课件</span>
         </button>
         <button
           className={`${styles.practiceTab} ${activeTab === "publicWelfare" ? styles.activePracticeTab : ""}`}
@@ -257,23 +277,37 @@ interface CoursePracticeTabProps {
 function CoursePracticeTab({ filters, onFiltersChange }: CoursePracticeTabProps) {
   const [appliedKeyword, setAppliedKeyword] = useState("");
   const [page, setPage] = useState(1);
+  const [lessonSortDirection, setLessonSortDirection] = useState<SortDirection>("desc");
+  const selectedCourse = filters.scope.courses[0] ?? "全部课程";
+  const classEntryLabels = filters.scope.classTypes.length > 0 ? filters.scope.classTypes : ["进入练课"];
   const filteredCoursewareList = useMemo(() => {
     const keyword = normalizeKeyword(appliedKeyword);
+    const matchesCourse = normalizeKeyword(selectedCourse).includes(keyword);
 
-    if (!keyword) {
-      return coursewareList;
-    }
-
-    return coursewareList.filter((item) => item.title.toLowerCase().includes(keyword));
-  }, [appliedKeyword]);
-  const totalPages = Math.max(1, Math.ceil(filteredCoursewareList.length / PAGE_SIZE));
+    return coursewareList
+      .filter((item) => !keyword || matchesCourse || item.title.toLowerCase().includes(keyword))
+      .map((item) => ({
+        ...item,
+        grade: getCourseGrade(selectedCourse, item.grade),
+        courseName: selectedCourse,
+      }));
+  }, [appliedKeyword, selectedCourse]);
+  const sortedCoursewareList = useMemo(() => {
+    return [...filteredCoursewareList].sort((current, next) =>
+      lessonSortDirection === "desc"
+        ? next.lessonNo - current.lessonNo
+        : current.lessonNo - next.lessonNo,
+    );
+  }, [filteredCoursewareList, lessonSortDirection]);
+  const totalPages = Math.max(1, Math.ceil(sortedCoursewareList.length / PAGE_SIZE));
   const pageCoursewareList = useMemo(
-    () => getPageItems(filteredCoursewareList, Math.min(page, totalPages)),
-    [filteredCoursewareList, page, totalPages],
+    () => getPageItems(sortedCoursewareList, Math.min(page, totalPages)),
+    [sortedCoursewareList, page, totalPages],
   );
 
   const handleFilter = <Key extends keyof CourseFilters>(key: Key, value: CourseFilters[Key]) => {
     onFiltersChange({ ...filters, [key]: value });
+    setPage(1);
   };
 
   const handleSearch = () => {
@@ -288,9 +322,16 @@ function CoursePracticeTab({ filters, onFiltersChange }: CoursePracticeTabProps)
     setPage(1);
   };
 
-  const handleEnterPractice = (item: CoursewareItem) => {
-    console.log("进入练课", item);
+  const handleEnterPractice = (item: CoursewareItem, classType?: string) => {
+    console.log("进入练课", { ...item, classType });
   };
+
+  const handleToggleLessonSort = () => {
+    setLessonSortDirection((direction) => (direction === "desc" ? "asc" : "desc"));
+    setPage(1);
+  };
+
+  const isLessonSortDesc = lessonSortDirection === "desc";
 
   return (
     <>
@@ -351,22 +392,36 @@ function CoursePracticeTab({ filters, onFiltersChange }: CoursePracticeTabProps)
         <div className={styles.listTitleGroup}>
           <h2>课程课件列表</h2>
           <span>
-            共找到 <strong>{appliedKeyword ? filteredCoursewareList.length : coursewareList.length}</strong> 个课件
+            共找到 <strong>{sortedCoursewareList.length}</strong> 个课件
           </span>
         </div>
+        <button
+          className={styles.sortButton}
+          type="button"
+          onClick={handleToggleLessonSort}
+          aria-label={`当前按讲次${isLessonSortDesc ? "倒序" : "正序"}排列，点击切换为${isLessonSortDesc ? "正序" : "倒序"}`}
+        >
+          {isLessonSortDesc ? <ArrowDown01 size={18} /> : <ArrowUp01 size={18} />}
+          <span>讲次{isLessonSortDesc ? "倒序" : "正序"}</span>
+        </button>
       </div>
 
-      {filteredCoursewareList.length > 0 ? (
+      {sortedCoursewareList.length > 0 ? (
         <>
-          <div className={styles.cardGrid}>
+          <div className={`${styles.cardGrid} ${styles.courseCardGrid}`}>
             {pageCoursewareList.map((item) => (
-              <CoursewareCard key={item.id} item={item} onAction={handleEnterPractice} />
+              <CoursewareCard
+                key={item.id}
+                item={item}
+                actionLabels={classEntryLabels}
+                onAction={handleEnterPractice}
+              />
             ))}
           </div>
           <Pagination
             currentPage={Math.min(page, totalPages)}
             pageSize={PAGE_SIZE}
-            total={filteredCoursewareList.length}
+            total={sortedCoursewareList.length}
             onPageChange={setPage}
           />
         </>
@@ -388,6 +443,7 @@ function PublicWelfarePracticeTab({
 }: PublicWelfarePracticeTabProps) {
   const [appliedKeyword, setAppliedKeyword] = useState("");
   const [page, setPage] = useState(1);
+  const [timeSortDirection, setTimeSortDirection] = useState<SortDirection>("desc");
   const filteredPublicWelfareList = useMemo(() => {
     const keyword = normalizeKeyword(appliedKeyword);
 
@@ -397,10 +453,14 @@ function PublicWelfarePracticeTab({
 
     return publicWelfareCoursewareList.filter((item) => item.title.toLowerCase().includes(keyword));
   }, [appliedKeyword]);
-  const totalPages = Math.max(1, Math.ceil(filteredPublicWelfareList.length / PAGE_SIZE));
+  const sortedPublicWelfareList = useMemo(
+    () => sortByCreatedAt(filteredPublicWelfareList, timeSortDirection),
+    [filteredPublicWelfareList, timeSortDirection],
+  );
+  const totalPages = Math.max(1, Math.ceil(sortedPublicWelfareList.length / PAGE_SIZE));
   const pagePublicWelfareList = useMemo(
-    () => getPageItems(filteredPublicWelfareList, Math.min(page, totalPages)),
-    [filteredPublicWelfareList, page, totalPages],
+    () => getPageItems(sortedPublicWelfareList, Math.min(page, totalPages)),
+    [sortedPublicWelfareList, page, totalPages],
   );
 
   const handleFilter = <Key extends keyof PublicWelfareFilters>(
@@ -408,6 +468,7 @@ function PublicWelfarePracticeTab({
     value: PublicWelfareFilters[Key],
   ) => {
     onFiltersChange({ ...filters, [key]: value });
+    setPage(1);
   };
 
   const handleSearch = () => {
@@ -425,6 +486,13 @@ function PublicWelfarePracticeTab({
   const handleEnterPractice = (item: CoursewareItem) => {
     console.log("进入公益课练课", item);
   };
+
+  const handleToggleTimeSort = () => {
+    setTimeSortDirection((direction) => (direction === "desc" ? "asc" : "desc"));
+    setPage(1);
+  };
+
+  const isTimeSortDesc = timeSortDirection === "desc";
 
   return (
     <>
@@ -485,16 +553,21 @@ function PublicWelfarePracticeTab({
         <div className={styles.listTitleGroup}>
           <h2>公益课课件列表</h2>
           <span>
-            共找到{" "}
-            <strong>
-              {appliedKeyword ? filteredPublicWelfareList.length : publicWelfareCoursewareList.length}
-            </strong>{" "}
-            个课件
+            共找到 <strong>{sortedPublicWelfareList.length}</strong> 个课件
           </span>
         </div>
+        <button
+          className={styles.sortButton}
+          type="button"
+          onClick={handleToggleTimeSort}
+          aria-label={`当前按创建时间${isTimeSortDesc ? "最新" : "最早"}排列，点击切换为${isTimeSortDesc ? "最早" : "最新"}`}
+        >
+          {isTimeSortDesc ? <ArrowDown01 size={18} /> : <ArrowUp01 size={18} />}
+          <span>时间{isTimeSortDesc ? "最新" : "最早"}</span>
+        </button>
       </div>
 
-      {filteredPublicWelfareList.length > 0 ? (
+      {sortedPublicWelfareList.length > 0 ? (
         <>
           <div className={styles.cardGrid}>
             {pagePublicWelfareList.map((item) => (
@@ -504,7 +577,7 @@ function PublicWelfarePracticeTab({
           <Pagination
             currentPage={Math.min(page, totalPages)}
             pageSize={PAGE_SIZE}
-            total={filteredPublicWelfareList.length}
+            total={sortedPublicWelfareList.length}
             onPageChange={setPage}
           />
         </>
@@ -523,6 +596,7 @@ interface EntrancePracticeTabProps {
 function EntrancePracticeTab({ filters, onFiltersChange }: EntrancePracticeTabProps) {
   const [appliedKeyword, setAppliedKeyword] = useState("");
   const [page, setPage] = useState(1);
+  const [timeSortDirection, setTimeSortDirection] = useState<SortDirection>("desc");
   const filteredEntranceCoursewareList = useMemo(() => {
     const keyword = normalizeKeyword(appliedKeyword);
 
@@ -532,10 +606,14 @@ function EntrancePracticeTab({ filters, onFiltersChange }: EntrancePracticeTabPr
 
     return entranceCoursewareList.filter((item) => item.title.toLowerCase().includes(keyword));
   }, [appliedKeyword]);
-  const totalPages = Math.max(1, Math.ceil(filteredEntranceCoursewareList.length / PAGE_SIZE));
+  const sortedEntranceCoursewareList = useMemo(
+    () => sortByCreatedAt(filteredEntranceCoursewareList, timeSortDirection),
+    [filteredEntranceCoursewareList, timeSortDirection],
+  );
+  const totalPages = Math.max(1, Math.ceil(sortedEntranceCoursewareList.length / PAGE_SIZE));
   const pageEntranceCoursewareList = useMemo(
-    () => getPageItems(filteredEntranceCoursewareList, Math.min(page, totalPages)),
-    [filteredEntranceCoursewareList, page, totalPages],
+    () => getPageItems(sortedEntranceCoursewareList, Math.min(page, totalPages)),
+    [sortedEntranceCoursewareList, page, totalPages],
   );
 
   const handleFilter = <Key extends keyof EntranceFilters>(
@@ -543,6 +621,7 @@ function EntrancePracticeTab({ filters, onFiltersChange }: EntrancePracticeTabPr
     value: EntranceFilters[Key],
   ) => {
     onFiltersChange({ ...filters, [key]: value });
+    setPage(1);
   };
 
   const handleSearch = () => {
@@ -560,6 +639,13 @@ function EntrancePracticeTab({ filters, onFiltersChange }: EntrancePracticeTabPr
   const handleEnterCourseware = (item: EntranceCoursewareItem) => {
     console.log("进入课件", item);
   };
+
+  const handleToggleTimeSort = () => {
+    setTimeSortDirection((direction) => (direction === "desc" ? "asc" : "desc"));
+    setPage(1);
+  };
+
+  const isTimeSortDesc = timeSortDirection === "desc";
 
   return (
     <>
@@ -620,12 +706,21 @@ function EntrancePracticeTab({ filters, onFiltersChange }: EntrancePracticeTabPr
         <div className={styles.listTitleGroup}>
           <h2>森林探秘课件列表</h2>
           <span>
-            共找到 <strong>{appliedKeyword ? filteredEntranceCoursewareList.length : 6}</strong> 个课件
+            共找到 <strong>{sortedEntranceCoursewareList.length}</strong> 个课件
           </span>
         </div>
+        <button
+          className={styles.sortButton}
+          type="button"
+          onClick={handleToggleTimeSort}
+          aria-label={`当前按创建时间${isTimeSortDesc ? "最新" : "最早"}排列，点击切换为${isTimeSortDesc ? "最早" : "最新"}`}
+        >
+          {isTimeSortDesc ? <ArrowDown01 size={18} /> : <ArrowUp01 size={18} />}
+          <span>时间{isTimeSortDesc ? "最新" : "最早"}</span>
+        </button>
       </div>
 
-      {filteredEntranceCoursewareList.length > 0 ? (
+      {sortedEntranceCoursewareList.length > 0 ? (
         <>
           <div className={styles.cardGrid}>
             {pageEntranceCoursewareList.map((item) => (
@@ -640,7 +735,7 @@ function EntrancePracticeTab({ filters, onFiltersChange }: EntrancePracticeTabPr
           <Pagination
             currentPage={Math.min(page, totalPages)}
             pageSize={PAGE_SIZE}
-            total={filteredEntranceCoursewareList.length}
+            total={sortedEntranceCoursewareList.length}
             onPageChange={setPage}
           />
         </>

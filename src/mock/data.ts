@@ -137,6 +137,7 @@ export const publicWelfareCoursewareList: CoursewareItem[] = publicWelfareTitles
   year: index < 6 ? 2026 : 2025,
   grade: index % 2 === 0 ? "五年级" : "四年级",
   courseName: "公益课",
+  createdAt: `2026-06-${String(14 - index).padStart(2, "0")}T09:00:00+08:00`,
 }));
 
 export const entranceCoursewareList: EntranceCoursewareItem[] = [
@@ -146,6 +147,7 @@ export const entranceCoursewareList: EntranceCoursewareItem[] = [
     year: 2026,
     grade: "五年级",
     subject: "信息学算法",
+    createdAt: "2026-06-12T09:00:00+08:00",
   },
   {
     id: 2,
@@ -153,6 +155,7 @@ export const entranceCoursewareList: EntranceCoursewareItem[] = [
     year: 2026,
     grade: "五年级",
     subject: "信息学算法",
+    createdAt: "2026-06-14T09:00:00+08:00",
   },
   {
     id: 3,
@@ -160,6 +163,7 @@ export const entranceCoursewareList: EntranceCoursewareItem[] = [
     year: 2026,
     grade: "五年级",
     subject: "数学思维",
+    createdAt: "2026-06-13T09:00:00+08:00",
   },
   {
     id: 4,
@@ -167,6 +171,7 @@ export const entranceCoursewareList: EntranceCoursewareItem[] = [
     year: 2026,
     grade: "五年级",
     subject: "信息学算法",
+    createdAt: "2026-06-10T09:00:00+08:00",
   },
   {
     id: 5,
@@ -174,6 +179,7 @@ export const entranceCoursewareList: EntranceCoursewareItem[] = [
     year: 2025,
     grade: "五年级",
     subject: "信息学算法",
+    createdAt: "2026-06-09T09:00:00+08:00",
   },
   {
     id: 6,
@@ -181,6 +187,7 @@ export const entranceCoursewareList: EntranceCoursewareItem[] = [
     year: 2025,
     grade: "五年级",
     subject: "数学思维",
+    createdAt: "2026-06-08T09:00:00+08:00",
   },
 ];
 
@@ -190,12 +197,8 @@ export const defaultCourseFilters: CourseFilters = {
   scope: {
     subject: "信息学算法",
     courseType: "长期课-暑假课",
-    grades: ["五年级", "六年级"],
-    courses: [
-      "2026五年级信息学算法暑假课",
-      "2026五年级信息学算法暑假课【衔接班】",
-      "2026六年级信息学算法暑假课",
-    ],
+    grades: ["五年级"],
+    courses: ["2026五年级信息学算法暑假课"],
     classTypes: ["小星星", "小月亮"],
   },
   keyword: "",
