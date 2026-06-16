@@ -188,7 +188,7 @@ export function CourseScopeField({ label, year, value, onChange }: CourseScopeFi
 
       {open ? (
         <div className={styles.panel} id={panelId} role="dialog" aria-label={label} style={panelStyle}>
-          <div className={styles.panelTitle}>课程范围</div>
+          <div className={styles.panelTitle}>相关课程</div>
           <div className={styles.columns}>
             <ChoiceColumn
               title="学科"

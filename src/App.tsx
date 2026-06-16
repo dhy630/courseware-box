@@ -349,7 +349,7 @@ function CoursePracticeTab({ filters, onFiltersChange }: CoursePracticeTabProps)
           onChange={(value) => handleFilter("branch", value)}
         />
         <CourseScopeField
-          label="课程范围"
+          label="相关课程"
           year={filters.year}
           value={filters.scope}
           onChange={(value) => handleFilter("scope", value)}

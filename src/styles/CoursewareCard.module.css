@@ -10,7 +10,13 @@
   border: 1px solid var(--card-border);
   border-radius: 16px;
   background: linear-gradient(135deg, var(--solid-surface) 0%, var(--soft-surface) 100%);
-  box-shadow: var(--shadow-light);
+  box-shadow: 0 4px 14px rgba(32, 83, 155, 0.035);
+}
+
+:global(.appShell[data-theme="dark"]) .card {
+  box-shadow:
+    0 0 0 1px rgba(113, 147, 190, 0.1),
+    0 6px 16px rgba(0, 0, 0, 0.16);
 }
 
 .content {
