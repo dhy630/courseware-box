@@ -31,6 +31,7 @@ export interface CoursewareItem {
   year: number;
   grade: string;
   courseName: string;
+  createdAt?: string;
 }
 
 export interface EntranceCoursewareItem {
@@ -39,14 +40,21 @@ export interface EntranceCoursewareItem {
   year: number;
   grade: string;
   subject: string;
+  createdAt?: string;
+}
+
+export interface CourseScopeSelection {
+  subject: string;
+  courseType: string;
+  grades: string[];
+  courses: string[];
+  classTypes: string[];
 }
 
 export interface CourseFilters {
   year: string;
   branch: string;
-  subjectGrade: string;
-  courseTypeCourse: string;
-  classType: string;
+  scope: CourseScopeSelection;
   keyword: string;
 }
 

@@ -10,13 +10,20 @@
   border: 1px solid var(--card-border);
   border-radius: 16px;
   background: linear-gradient(135deg, var(--solid-surface) 0%, var(--soft-surface) 100%);
-  box-shadow: var(--shadow-light);
+  box-shadow: 0 4px 14px rgba(32, 83, 155, 0.035);
+}
+
+:global(.appShell[data-theme="dark"]) .card {
+  box-shadow:
+    0 0 0 1px rgba(113, 147, 190, 0.1),
+    0 6px 16px rgba(0, 0, 0, 0.16);
 }
 
 .content {
   position: relative;
   z-index: 1;
   min-width: 0;
+  flex: 1 1 auto;
 }
 
 .tag {
@@ -35,15 +42,20 @@
 .card h3 {
   margin: 18px 0 14px;
   color: var(--text-primary);
-  font-size: 25px;
+  font-size: 24px;
   font-weight: 800;
   line-height: 1.25;
+}
+
+.singleActionCard h3 {
+  max-width: calc(100% - 190px);
 }
 
 .meta {
   display: flex;
   align-items: center;
   gap: 14px;
+  min-width: 0;
   color: var(--text-secondary);
   font-size: 16px;
   font-weight: 650;
@@ -53,6 +65,25 @@
   display: inline-flex;
   align-items: center;
   gap: 8px;
+  min-width: 0;
+  white-space: nowrap;
+}
+
+.meta svg {
+  flex: 0 0 16px;
+  width: 16px;
+  height: 16px;
+}
+
+.meta span:last-child {
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.singleActionCard .meta span:last-child {
+  flex: 0 0 auto;
+  overflow: visible;
+  text-overflow: clip;
 }
 
 .meta i {
@@ -86,4 +117,40 @@
 
 .action:hover {
   background: linear-gradient(180deg, #0d79ef 0%, #005fd5 100%);
+}
+
+.singleActionCard .action {
+  position: absolute;
+  right: 40px;
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.actionGroup {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex: 0 0 auto;
+  flex-wrap: wrap;
+  justify-content: end;
+  gap: 10px;
+  width: min(456px, 48%);
+}
+
+.actionGroup .action {
+  flex: 0 0 calc((100% - 30px) / 4);
+  min-width: 0;
+  padding: 0 12px;
+}
+
+@media (max-width: 1100px) {
+  .actionGroup {
+    width: min(420px, 50%);
+    gap: 8px;
+  }
+
+  .actionGroup .action {
+    flex-basis: calc((100% - 24px) / 4);
+    font-size: 16px;
+  }
 }
